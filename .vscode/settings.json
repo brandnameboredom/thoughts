@@ -4,5 +4,8 @@
   "deno.unstable": true,
   "deno.suggest.imports.hosts": {
     "https://deno.land": true
+  },
+  "yaml.schemas": {
+    "https://json.schemastore.org/yamllint.json": "file:///Users/bradturner/development/deno/brandnameboredom/brandnameboredom-blog/_data/site.yml"
   }
 }

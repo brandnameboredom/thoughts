@@ -8,6 +8,8 @@ import resolveUrls from "lume/plugins/resolve_urls.ts";
 import netlifyCMS from "lume/plugins/netlify_cms.ts";
 import pageFind from "lume/plugins/pagefind.ts";
 
+import lang_bash from "https://unpkg.com/@highlightjs/cdn-assets@11.6.0/es/languages/bash.min.js";
+
 const site = lume({
   location: new URL("https://example.com/"),
 });
@@ -17,7 +19,14 @@ site
   .copy("img")
   .use(postcss())
   .use(date())
-  .use(codeHighlight())
+  .use(codeHighlight(
+    {
+      languages: {
+        bash: lang_bash,
+        zsh: lang_bash,
+      },
+    }
+  ))
   .use(basePath())
   .use(pageFind({
     ui: {
