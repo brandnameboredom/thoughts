@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Running a dotnet pipeline in jenkins within minishift</title>
+    <meta name="description" content="Running a dotnet pipeline in jenkins within minishift">
+    <link rel="stylesheet" href="/thoughts/pagefind/pagefind-ui.css"><link rel="stylesheet" href="/thoughts/styles.css">
+    <link rel="alternate" href="/thoughts/feed.xml" type="application/atom+xml" title="That. Just. Happened.">
+    <link rel="alternate" href="/thoughts/feed.json" type="application/json" title="That. Just. Happened.">
+  <script type="text/javascript" src="/thoughts/pagefind/pagefind-ui.js"></script><script type="text/javascript">window.addEventListener('DOMContentLoaded', () => { new PagefindUI({"element":"#search","showImages":false,"showEmptyFilters":true,"resetStyles":false,"bundlePath":"/thoughts/pagefind/","baseUrl":"/thoughts/"}); });</script></head>
+  <body>
+    <nav class="navbar">
+      <a href="/thoughts/" class="navbar-home">
+        <strong>That. Just. Happened.</strong>
+      </a>
+
+      <ul class="navbar-links">
+        <li>
+          <a href="/thoughts/">
+            Home
+          </a>
+        </li>
+        <li>
+          <a href="/thoughts/posts/">
+            Archive
+          </a>
+        </li>
+        <li>
+          <a href="/thoughts/about/">
+            About Me
+          </a>
+        </li>
+      </ul>
+
+      <div class="navbar-search">
+        <div id="search"></div>
+      </div>
+    </nav>
+
+    <main class="body-post">
+      <article class="post" data-pagefind-body="">
+  <div class="post-header">
+    <h1 class="post-title">Running a dotnet pipeline in jenkins within minishift</h1>
+
+    <nav class="post-tags">
+    
+      <a href="/thoughts/tags/Dotnet/" class="tag">Dotnet</a>
+    
+      <a href="/thoughts/tags/Minishift/" class="tag">Minishift</a>
+    
+      <a href="/thoughts/tags/Openshift/" class="tag">Openshift</a>
+    
+      <a href="/thoughts/tags/Jenkins/" class="tag">Jenkins</a>
+    
+    </nav>
+
+    <time class="post-date" datetime="2018-04-25 00:00:00">
+      April 25th, 2018
+    </time>
+  </div>
+
+  <div class="post-body">
+    <p>I was toying around with the sample <a href="https://github.com/OpenShiftDemos/openshift-cd-demo">Openshift CI/CD pipeline example</a> and decided I would try to expand the solution to handle a basic build/test pipeline for a dotnet project I had within minishift.  First things first, I created a new project within my gitlab instance to store the dotnet project code I had and pushed the code into the repository.  Then, I searched around the internet to see if RedHat provided a dotnet jenkins slave image I could leverage to build the source.  Turns out, <a href="https://github.com/redhat-developer/dotnet-jenkins-slave">they do</a>.  Sweet! So, I built the image and tagged it with my minishift internal docker registry ip using:</p>
+<pre><code class="language-zsh hljs"><span class="hljs-built_in">cd</span> /my/git/clone/location/for/the/dotnet-jenkins-slave/from/RedHat
+docker build -t &lt;minishift_registry_ip&gt;:5000/openshift/dotnet-slave .
+</code></pre>
+<p>Now that I tagged the image.  I pushed it to the internal docker registry within minishift.  I had to make sure the account I used to log into the registry had the proper permissions to push images to the openshift image stream.</p>
+<pre><code class="language-zsh hljs"><span class="hljs-built_in">eval</span> $(minishift docker-env)
+docker login &lt;minishift_registry_ip&gt;:5000
+docker push &lt;minishift_registry_ip&gt;:5000/openshift/dotnet-slave
+</code></pre>
+<p>Ok, now that I have the image in the minishift docker registry, I need to alter the Jenkins image used in the <a href="https://github.com/OpenShiftDemos/openshift-cd-demo">Openshift CI/CD pipeline example</a> to include a container definition for the dotnet slave.  I could do this after deploying the Jenkins image but I wanted to play with the packaging as I'm new to Jenkins in general.  So, I cloned <a href="https://github.com/openshift/jenkins">the repo</a> for the Jenkins image and began editing the <code>kube-slave-common.sh</code> file.</p>
+<p>First, I added a few variables to hold the dotnet image information.</p>
+<pre><code class="language-zsh hljs">NODEJS_SLAVE=<span class="hljs-variable">${NODEJS_SLAVE_IMAGE:-registry.access.redhat.com/openshift3/jenkins-slave-nodejs-rhel7:<span class="hljs-variable">${JENKINS_SLAVE_IMAGE_TAG}</span>}</span>
+MAVEN_SLAVE=<span class="hljs-variable">${MAVEN_SLAVE_IMAGE:-registry.access.redhat.com/openshift3/jenkins-slave-maven-rhel7:<span class="hljs-variable">${JENKINS_SLAVE_IMAGE_TAG}</span>}</span>
+DOTNET_SLAVE=<span class="hljs-variable">${DOTNET_SLAVE_IMAGE:-registry.access.redhat.com/dotnet/dotnet-20-jenkins-slave-rhel7:<span class="hljs-variable">${JENKINS_SLAVE_IMAGE_TAG}</span>}</span>
+
+<span class="hljs-comment"># if the master is running the centos image, use the centos slave images.</span>
+<span class="hljs-keyword">if</span> [[ `grep CentOS /etc/redhat-release` ]]; <span class="hljs-keyword">then</span>
+  NODEJS_SLAVE=<span class="hljs-variable">${NODEJS_SLAVE_IMAGE:-openshift/jenkins-slave-nodejs-centos7:<span class="hljs-variable">${JENKINS_SLAVE_IMAGE_TAG}</span>}</span>
+  MAVEN_SLAVE=<span class="hljs-variable">${MAVEN_SLAVE_IMAGE:-openshift/jenkins-slave-maven-centos7:<span class="hljs-variable">${JENKINS_SLAVE_IMAGE_TAG}</span>}</span>
+  DOTNET_SLAVE=<span class="hljs-variable">${DOTNET_SLAVE_IMAGE:-openshift/dotnet-20-jenkins-slave-centos7:<span class="hljs-variable">${JENKINS_SLAVE_IMAGE_TAG}</span>}</span>
+<span class="hljs-keyword">fi</span>
+</code></pre>
+<p>Then I copied and pasted the container definition for nodejs and updated the variables and name/label values to the DOTNET_SLAVE variable I added and "dotnet" respectively.  Once this was done, I needed to rebuild the Jenkins image and tag/push to the minishift docker registry in the same way as we did for the slave image.</p>
+<pre><code class="language-zsh hljs"><span class="hljs-built_in">cd</span> /location/of/Jenkins/git/repo/clone/2
+docker build -t &lt;minishift_registry_ip&gt;:5000/openshift/jenkins-dotnet .
+docker push &lt;minishift_registry_ip&gt;:5000/openshift/jenkins-dotnet
+</code></pre>
+<p>Now, we need to grab the Jenkins openshift template from the Openshift directory in the cloned repo and deploy that to minishift.  During the install wizard, be sure to specify "jenkins-dotnet:latest" as the image.  Once Jenkins is up, login and add the pipeline.  Here was the pipeline I used:</p>
+<pre><code class="language-json hljs">pipeline <span class="hljs-punctuation">{</span>
+    agent <span class="hljs-punctuation">{</span>
+      label 'dotnet'
+    <span class="hljs-punctuation">}</span>
+    stages <span class="hljs-punctuation">{</span>
+      stage('Build') <span class="hljs-punctuation">{</span>
+        steps <span class="hljs-punctuation">{</span>
+          git url<span class="hljs-punctuation">:</span> 'http<span class="hljs-punctuation">:</span><span class="hljs-comment">//&lt;gitlab_git_url&gt;'</span>
+          sh <span class="hljs-string">"dotnet build"</span>
+        <span class="hljs-punctuation">}</span>
+      <span class="hljs-punctuation">}</span>
+      stage('Test') <span class="hljs-punctuation">{</span>
+        steps <span class="hljs-punctuation">{</span>
+          sh <span class="hljs-string">"dotnet test"</span>
+        <span class="hljs-punctuation">}</span>
+      <span class="hljs-punctuation">}</span>
+    <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span>
+</code></pre>
+<p>Now, initiate the pipeline in Jenkins and monitor the "pods" tab within minishift.  You should see it spin up the dotnet container you added to run the pipeline.  You can also watch the output for the pipeline within Jenkins and see the build go through.  Now to add the rest of the CI/CD pipeline...</p>
+
+  </div>
+</article>
+
+<hr>
+
+<nav class="post-navigation">
+  <ul>
+    <li>
+      ← Previous: <a href="/thoughts/posts/2018-04-05-nexusdocker/" rel="prev">Running a local Docker registry in Nexus</a>
+    </li>
+    
+    <li>
+      <strong>Next: <a href="/thoughts/posts/2018-05-22-gvisor/" rel="next">gVisor</a> →</strong>
+    </li>
+    
+  </ul>
+</nav>
+    </main>
+
+    <footer></footer>
+
+    <!-- Current page: /posts/2018-04-25-jenkins-minishift-dotnet/ -->
+  
+
+</body></html>

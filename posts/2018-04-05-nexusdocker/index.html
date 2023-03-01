@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Running a local Docker registry in Nexus</title>
+    <meta name="description" content="Running a local Docker registry in Nexus">
+    <link rel="stylesheet" href="/thoughts/pagefind/pagefind-ui.css"><link rel="stylesheet" href="/thoughts/styles.css">
+    <link rel="alternate" href="/thoughts/feed.xml" type="application/atom+xml" title="That. Just. Happened.">
+    <link rel="alternate" href="/thoughts/feed.json" type="application/json" title="That. Just. Happened.">
+  <script type="text/javascript" src="/thoughts/pagefind/pagefind-ui.js"></script><script type="text/javascript">window.addEventListener('DOMContentLoaded', () => { new PagefindUI({"element":"#search","showImages":false,"showEmptyFilters":true,"resetStyles":false,"bundlePath":"/thoughts/pagefind/","baseUrl":"/thoughts/"}); });</script></head>
+  <body>
+    <nav class="navbar">
+      <a href="/thoughts/" class="navbar-home">
+        <strong>That. Just. Happened.</strong>
+      </a>
+
+      <ul class="navbar-links">
+        <li>
+          <a href="/thoughts/">
+            Home
+          </a>
+        </li>
+        <li>
+          <a href="/thoughts/posts/">
+            Archive
+          </a>
+        </li>
+        <li>
+          <a href="/thoughts/about/">
+            About Me
+          </a>
+        </li>
+      </ul>
+
+      <div class="navbar-search">
+        <div id="search"></div>
+      </div>
+    </nav>
+
+    <main class="body-post">
+      <article class="post" data-pagefind-body="">
+  <div class="post-header">
+    <h1 class="post-title">Running a local Docker registry in Nexus</h1>
+
+    <nav class="post-tags">
+    
+      <a href="/thoughts/tags/Docker/" class="tag">Docker</a>
+    
+      <a href="/thoughts/tags/Nexus/" class="tag">Nexus</a>
+    
+    </nav>
+
+    <time class="post-date" datetime="2018-04-05 00:00:00">
+      April 5th, 2018
+    </time>
+  </div>
+
+  <div class="post-body">
+    <p>I decided to try my hand at running my own locally hosted docker registry.  After some quick research, I settled upon <a href="https://www.sonatype.com/">Sonatype</a>'s Nexus.  Now, how to get it up and running within a <a href="https://www.docker.com/">Docker</a> container?  Let's start with a docker-compose.yaml file.  I don't necessarily care about a particular version so let's pull the <a href="https://hub.docker.com/r/sonatype/nexus3">latest Nexus 3 image from Sonatype via Docker hub</a>.</p>
+<pre><code class="language-yaml hljs"><span class="hljs-attr">nexus:</span>
+    <span class="hljs-attr">image:</span> <span class="hljs-string">sonatype/nexus3:latest</span>
+</code></pre>
+<p>Of course, we'll need to expose the Nexus ports and map them to ports on the host machine so let's add that definition to the docker-compose yaml file.  We'll need both the Nexus manager port (8081) as well as the port we plan to use when we setup the hosted docker repository within Nexus (8888).</p>
+<pre><code class="language-yaml hljs"><span class="hljs-attr">nexus:</span>
+    <span class="hljs-attr">image:</span> <span class="hljs-string">sonatype/nexus3:latest</span>
+    <span class="hljs-attr">ports:</span>
+        <span class="hljs-bullet">-</span> <span class="hljs-number">8081</span><span class="hljs-string">:8081</span>
+        <span class="hljs-bullet">-</span> <span class="hljs-number">8888</span><span class="hljs-string">:8888</span>
+</code></pre>
+<p>That should be all we need to get everything up and running but I'm going to add an additional step and map the nexus-data directory to a directory on my host machine in case I decide to bring this container down and back up later.  This leaves us with:</p>
+<pre><code class="language-yaml hljs"><span class="hljs-attr">nexus:</span>
+    <span class="hljs-attr">image:</span> <span class="hljs-string">sonatype/nexus3:latest</span>
+    <span class="hljs-attr">ports:</span>
+        <span class="hljs-bullet">-</span> <span class="hljs-number">8081</span><span class="hljs-string">:8081</span>
+        <span class="hljs-bullet">-</span> <span class="hljs-number">8888</span><span class="hljs-string">:8888</span>
+    <span class="hljs-attr">volumes:</span>
+        <span class="hljs-bullet">-</span> <span class="hljs-string">~/nexus-data-on-host:/nexus-data</span>
+</code></pre>
+<p>Now that we have the docker-compose.yaml file, let's spin up the container.</p>
+<pre><code class="language-zsh hljs">docker-compose up
+</code></pre>
+<p>We could have run that in detached mode with a "-d" option but I wanted to monitor the logs and wait for Nexus to report it is up and running.</p>
+<pre><code class="language-zsh hljs">Started Sonatype Nexus OSS 3.9.0-01
+</code></pre>
+<p>Success!  We have Nexus up and running.  Now let's log into localhost:8081 with the default username/password combination of admin/admin123 and setup a hosted docker repository on the port we exposed for it in the docker-compose file (8888).  If your looking for instructions on how to do this consult the <a href="http://books.sonatype.com/nexus-book/3.0/reference/docker.html">Nexus documentation</a> on Sonatype's site.  Once we have that registry created let's log into the registry with</p>
+<pre><code class="language-zsh hljs">docker login http://localhost:8888/repository/docker-hosted/
+</code></pre>
+<p>Finally, let's tag an image we have locally and push it to our registry</p>
+<pre><code class="language-zsh hljs">docker tag audiojak/lightning localhost:8888/audiojak:latest
+
+docker push localhost:8888/audiojak:latest
+</code></pre>
+
+  </div>
+</article>
+
+<hr>
+
+<nav class="post-navigation">
+  <ul>
+    <li>
+      ← Previous: <a href="/thoughts/posts/2017-05-25-eclipsecustomizations/" rel="prev">Customizing Eclipse</a>
+    </li>
+    
+    <li>
+      <strong>Next: <a href="/thoughts/posts/2018-04-25-jenkins-minishift-dotnet/" rel="next">Running a dotnet pipeline in jenkins within minishift</a> →</strong>
+    </li>
+    
+  </ul>
+</nav>
+    </main>
+
+    <footer></footer>
+
+    <!-- Current page: /posts/2018-04-05-nexusdocker/ -->
+  
+
+</body></html>

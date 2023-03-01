@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buildah</title>
+    <meta name="description" content="Buildah">
+    <link rel="stylesheet" href="/thoughts/pagefind/pagefind-ui.css"><link rel="stylesheet" href="/thoughts/styles.css">
+    <link rel="alternate" href="/thoughts/feed.xml" type="application/atom+xml" title="That. Just. Happened.">
+    <link rel="alternate" href="/thoughts/feed.json" type="application/json" title="That. Just. Happened.">
+  <script type="text/javascript" src="/thoughts/pagefind/pagefind-ui.js"></script><script type="text/javascript">window.addEventListener('DOMContentLoaded', () => { new PagefindUI({"element":"#search","showImages":false,"showEmptyFilters":true,"resetStyles":false,"bundlePath":"/thoughts/pagefind/","baseUrl":"/thoughts/"}); });</script></head>
+  <body>
+    <nav class="navbar">
+      <a href="/thoughts/" class="navbar-home">
+        <strong>That. Just. Happened.</strong>
+      </a>
+
+      <ul class="navbar-links">
+        <li>
+          <a href="/thoughts/">
+            Home
+          </a>
+        </li>
+        <li>
+          <a href="/thoughts/posts/">
+            Archive
+          </a>
+        </li>
+        <li>
+          <a href="/thoughts/about/">
+            About Me
+          </a>
+        </li>
+      </ul>
+
+      <div class="navbar-search">
+        <div id="search"></div>
+      </div>
+    </nav>
+
+    <main class="body-post">
+      <article class="post" data-pagefind-body="">
+  <div class="post-header">
+    <h1 class="post-title">Buildah</h1>
+
+    <nav class="post-tags">
+    
+      <a href="/thoughts/tags/Buildah/" class="tag">Buildah</a>
+    
+    </nav>
+
+    <time class="post-date" datetime="2018-10-10 00:00:00">
+      October 10th, 2018
+    </time>
+  </div>
+
+  <div class="post-body">
+    <p>I was doing some research on <a href="https://github.com/containers/buildah">buildah</a> recently and decided to try to play around with a simple speedtest app we had on hand.  This app is a fork of <a href="https://github.com/adolfintel/speedtest">this repository</a> on GitHub and does exactly what you would expect.  So, since we already had a Dockerfile defined for the app I decided to utilize the <code>bud</code> capability within buildah to <code>build using dockerfile (bud)</code>.</p>
+<p><code>buildah bud -f Dockerfile -t test .</code></p>
+<p>I didn't have to specify <code>-f Dockerfile</code> because the <code>bud</code> capability defaults to <code>Dockerfile</code> but whatever.  Once the image was build from the Dockerfile and tagged with the "test" label I was ready to grab a reference to the container and execute my python command.</p>
+<p><code>test_var=$(buildah from test)</code></p>
+<p>Now that <code>test_var</code> has my reference, I can tell buildah to run it with whatever command I would like.</p>
+<p><code>buildah run $test_var python -m flask run --host=0.0.0.0 --port=5000</code></p>
+<p>Bingo.  Speedtest is now running and I can hit the site at <code>localhost:5000</code>.  I did notice though that a call to <code>buildah images</code> as compared to <code>docker images</code> reveals that the buildah generated image is slightly larger than the one generated using the <code>docker build</code> command.  Hmmm...interesting...</p>
+
+  </div>
+</article>
+
+<hr>
+
+<nav class="post-navigation">
+  <ul>
+    <li>
+      ← Previous: <a href="/thoughts/posts/2018-09-19-configmapvolumemounts/" rel="prev">ConfigMap VolumeMount File Overwrite</a>
+    </li>
+    
+    <li>
+      <strong>Next: <a href="/thoughts/posts/2018-10-29-thephoenixproject/" rel="next">The Phoenix Project</a> →</strong>
+    </li>
+    
+  </ul>
+</nav>
+    </main>
+
+    <footer></footer>
+
+    <!-- Current page: /posts/2018-10-10-buildah/ -->
+  
+
+</body></html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resolving localhost</title>
+    <meta name="description" content="Resolving localhost">
+    <link rel="stylesheet" href="/thoughts/pagefind/pagefind-ui.css"><link rel="stylesheet" href="/thoughts/styles.css">
+    <link rel="alternate" href="/thoughts/feed.xml" type="application/atom+xml" title="That. Just. Happened.">
+    <link rel="alternate" href="/thoughts/feed.json" type="application/json" title="That. Just. Happened.">
+  <script type="text/javascript" src="/thoughts/pagefind/pagefind-ui.js"></script><script type="text/javascript">window.addEventListener('DOMContentLoaded', () => { new PagefindUI({"element":"#search","showImages":false,"showEmptyFilters":true,"resetStyles":false,"bundlePath":"/thoughts/pagefind/","baseUrl":"/thoughts/"}); });</script></head>
+  <body>
+    <nav class="navbar">
+      <a href="/thoughts/" class="navbar-home">
+        <strong>That. Just. Happened.</strong>
+      </a>
+
+      <ul class="navbar-links">
+        <li>
+          <a href="/thoughts/">
+            Home
+          </a>
+        </li>
+        <li>
+          <a href="/thoughts/posts/">
+            Archive
+          </a>
+        </li>
+        <li>
+          <a href="/thoughts/about/">
+            About Me
+          </a>
+        </li>
+      </ul>
+
+      <div class="navbar-search">
+        <div id="search"></div>
+      </div>
+    </nav>
+
+    <main class="body-post">
+      <article class="post" data-pagefind-body="">
+  <div class="post-header">
+    <h1 class="post-title">Resolving localhost</h1>
+
+    <nav class="post-tags">
+    
+      <a href="/thoughts/tags/Docker/" class="tag">Docker</a>
+    
+      <a href="/thoughts/tags/Localhost/" class="tag">Localhost</a>
+    
+      <a href="/thoughts/tags/Compose/" class="tag">Compose</a>
+    
+      <a href="/thoughts/tags/Alternative/" class="tag">Alternative</a>
+    
+    </nav>
+
+    <time class="post-date" datetime="2018-11-15 00:00:00">
+      November 15th, 2018
+    </time>
+  </div>
+
+  <div class="post-body">
+    <p>I ran into an issue the other day trying to test out a Jenkins slave docker image I had built to test some dotnetcore code.  I had an instance of <a href="https://hub.docker.com/_/sonarqube/">Sonarqube up and running inside of a docker container</a>.  So, I built my slave container and jumped into the bash of the executing slave container.  Once inside, I wanted to run the following commands:</p>
+<pre><code>dotnet /sonarqube-scanner/SonarScanner.MSBuild.dll begin /k:"myproject" /d:sonar.host.url=http://localhost:9000 /d:sonar.login="my_sonarqube_provided_login"
+
+dotnet build myproject.sln
+
+dotnet /sonarqube-scanner/SonarScanner.MSBuild.dll end
+</code></pre>
+<p>However, I realized that the command would fail because the "localhost" within the sonar.host.url parameter would resolve to the scanner container and not my host machine.  So, how do we address that?  Well, the correct answer is probably create a docker-compose pod network and change localhost to the appropriate name within the compose file.  Now that we have that disclaimer out of the way, we can talk about what I did.  Turns out, docker has this property you can use to get access to the localhost on the host machine running the container.  In my case, this means access to the Sonarqube scanner container running at localhost:9000.  So, I updated my commands to look like:</p>
+<pre><code>dotnet /sonarqube-scanner/SonarScanner.MSBuild.dll begin /k:"myproject" /d:sonar.host.url=http://docker.for.mac.localhost:9000 /d:sonar.login="my_sonarqube_provided_login"
+
+dotnet build myproject.sln
+
+dotnet /sonarqube-scanner/SonarScanner.MSBuild.dll end
+</code></pre>
+<p>Executed them and everything resolved and executed without error.  Sweet!  On to the next problem...</p>
+<p>FYI there is a windows version of the docker.for.mac.localhost property.  I bet you can guess what it is but in case you are feeling lazy today it is docker.for.win.localhost</p>
+
+  </div>
+</article>
+
+<hr>
+
+<nav class="post-navigation">
+  <ul>
+    <li>
+      ← Previous: <a href="/thoughts/posts/2018-10-29-thephoenixproject/" rel="prev">The Phoenix Project</a>
+    </li>
+    
+    <li>
+      <strong>Next: <a href="/thoughts/posts/2018-12-03-aws-reinvent-2018/" rel="next">AWS Re:Invent 2018</a> →</strong>
+    </li>
+    
+  </ul>
+</nav>
+    </main>
+
+    <footer></footer>
+
+    <!-- Current page: /posts/2018-11-15-hostlocalhostresolution/ -->
+  
+
+</body></html>

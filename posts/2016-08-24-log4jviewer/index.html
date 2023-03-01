@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log Viewers for Log4J</title>
+    <meta name="description" content="Log Viewers for Log4J">
+    <link rel="stylesheet" href="/thoughts/pagefind/pagefind-ui.css"><link rel="stylesheet" href="/thoughts/styles.css">
+    <link rel="alternate" href="/thoughts/feed.xml" type="application/atom+xml" title="That. Just. Happened.">
+    <link rel="alternate" href="/thoughts/feed.json" type="application/json" title="That. Just. Happened.">
+  <script type="text/javascript" src="/thoughts/pagefind/pagefind-ui.js"></script><script type="text/javascript">window.addEventListener('DOMContentLoaded', () => { new PagefindUI({"element":"#search","showImages":false,"showEmptyFilters":true,"resetStyles":false,"bundlePath":"/thoughts/pagefind/","baseUrl":"/thoughts/"}); });</script></head>
+  <body>
+    <nav class="navbar">
+      <a href="/thoughts/" class="navbar-home">
+        <strong>That. Just. Happened.</strong>
+      </a>
+
+      <ul class="navbar-links">
+        <li>
+          <a href="/thoughts/">
+            Home
+          </a>
+        </li>
+        <li>
+          <a href="/thoughts/posts/">
+            Archive
+          </a>
+        </li>
+        <li>
+          <a href="/thoughts/about/">
+            About Me
+          </a>
+        </li>
+      </ul>
+
+      <div class="navbar-search">
+        <div id="search"></div>
+      </div>
+    </nav>
+
+    <main class="body-post">
+      <article class="post" data-pagefind-body="">
+  <div class="post-header">
+    <h1 class="post-title">Log Viewers for Log4J</h1>
+
+    <nav class="post-tags">
+    
+      <a href="/thoughts/tags/Chainsaw/" class="tag">Chainsaw</a>
+    
+      <a href="/thoughts/tags/Otros Log Viewer/" class="tag">Otros Log Viewer</a>
+    
+      <a href="/thoughts/tags/Log4J/" class="tag">Log4J</a>
+    
+      <a href="/thoughts/tags/Liferay/" class="tag">Liferay</a>
+    
+    </nav>
+
+    <time class="post-date" datetime="2016-08-24 00:00:00">
+      August 24th, 2016
+    </time>
+  </div>
+
+  <div class="post-body">
+    <p>I ran into a situation at work the other day where I wanted to disect some rather large <a href="http://logging.apache.org/log4j/2.x/">Log4J</a> log files.  Each of the files contained a bunch of text log entries of the following format:</p>
+<blockquote>
+<p>13:20:32,243 INFO  [localhost-startStop-1][DialectDetector:71] Determine dialect</p>
+</blockquote>
+<p>What I wanted was a tool to help visualize what was going on in these files.  After a quick search, I stumbled upon two free tools I thought may do the trick:</p>
+<h1><a href="https://logging.apache.org/chainsaw/">Chainsaw</a></h1>
+<p>Chainsaw is "a companion application to Log4j written by members of the Log4j development community".  In Chainsaw, I had to create a new Receiver in order to process the .log file.  The receiver designates a "logFormat" property in which you can specify the pattern for each log message.  After some trial and error, these settings seemed to work:</p>
+<pre><code> fileURL: file:\\\C:\&lt;My Log Location&gt;\&lt;My log&gt;.log
+ filterExpression:
+ logFormat: TIMESTAMP LEVEL [THREAD][CLASS:LINE] MESSAGE
+ name: Custom Receiver
+ tailing: false
+ timestampFormat: HH:mm:ss,SSS
+</code></pre>
+<h1><a href="https://github.com/otros-systems/otroslogviewer">Otros Log Viewer</a></h1>
+<p>Otros Log Viewer is an open source piece of software whose intention is to assist in the analysis of application logs and traces.  In order to establish a connection between Otros Log Viewer and the log file I was attempting to analyze, I needed to supply a definition for each log file entry.  To do this, I created a .pattern file in the plugins &gt; logimporters directory which contained the text:</p>
+<pre><code> type=log4j
+ pattern=TIMESTAMP LEVEL [THREAD][CLASS:LINE] MESSAGE
+ dateFormat=HH:mm:ss,SSS
+ name=Lo4j-CustomReceiver
+ charset=windows-1252
+</code></pre>
+
+  </div>
+</article>
+
+<hr>
+
+<nav class="post-navigation">
+  <ul>
+    <li>
+      ← Previous: <a href="/thoughts/posts/2016-06-29-yuidebugging/" rel="prev">Debugging AlloyUI</a>
+    </li>
+    
+    <li>
+      <strong>Next: <a href="/thoughts/posts/2017-05-25-eclipsecustomizations/" rel="next">Customizing Eclipse</a> →</strong>
+    </li>
+    
+  </ul>
+</nav>
+    </main>
+
+    <footer></footer>
+
+    <!-- Current page: /posts/2016-08-24-log4jviewer/ -->
+  
+
+</body></html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debugging AlloyUI</title>
+    <meta name="description" content="Debugging AlloyUI">
+    <link rel="stylesheet" href="/thoughts/pagefind/pagefind-ui.css"><link rel="stylesheet" href="/thoughts/styles.css">
+    <link rel="alternate" href="/thoughts/feed.xml" type="application/atom+xml" title="That. Just. Happened.">
+    <link rel="alternate" href="/thoughts/feed.json" type="application/json" title="That. Just. Happened.">
+  <script type="text/javascript" src="/thoughts/pagefind/pagefind-ui.js"></script><script type="text/javascript">window.addEventListener('DOMContentLoaded', () => { new PagefindUI({"element":"#search","showImages":false,"showEmptyFilters":true,"resetStyles":false,"bundlePath":"/thoughts/pagefind/","baseUrl":"/thoughts/"}); });</script></head>
+  <body>
+    <nav class="navbar">
+      <a href="/thoughts/" class="navbar-home">
+        <strong>That. Just. Happened.</strong>
+      </a>
+
+      <ul class="navbar-links">
+        <li>
+          <a href="/thoughts/">
+            Home
+          </a>
+        </li>
+        <li>
+          <a href="/thoughts/posts/">
+            Archive
+          </a>
+        </li>
+        <li>
+          <a href="/thoughts/about/">
+            About Me
+          </a>
+        </li>
+      </ul>
+
+      <div class="navbar-search">
+        <div id="search"></div>
+      </div>
+    </nav>
+
+    <main class="body-post">
+      <article class="post" data-pagefind-body="">
+  <div class="post-header">
+    <h1 class="post-title">Debugging AlloyUI</h1>
+
+    <nav class="post-tags">
+    
+      <a href="/thoughts/tags/Liferay/" class="tag">Liferay</a>
+    
+      <a href="/thoughts/tags/AUI/" class="tag">AUI</a>
+    
+      <a href="/thoughts/tags/AlloyUI/" class="tag">AlloyUI</a>
+    
+      <a href="/thoughts/tags/YUI/" class="tag">YUI</a>
+    
+    </nav>
+
+    <time class="post-date" datetime="2016-06-29 00:00:00">
+      June 29th, 2016
+    </time>
+  </div>
+
+  <div class="post-body">
+    <p><a href="https://www.liferay.com/">Liferay</a> uses <a href="http://alloyui.com/">AlloyUI</a> for frontend development by default.  AlloyUI is a wrapper around <a href="http://yuilibrary.com/">YUI</a>.  With that said, all of the YUI development niceties are available for debugging AlloyUI code.  For instance, the console:</p>
+<pre><code class="language-javascript hljs"><span class="hljs-title function_">AUI</span>().<span class="hljs-title function_">ready</span>(<span class="hljs-string">'aui-base'</span>, <span class="hljs-string">'console'</span>, <span class="hljs-keyword">function</span>(<span class="hljs-params">A</span>) {
+    <span class="hljs-keyword">new</span> A.<span class="hljs-title class_">Console</span>({
+        <span class="hljs-attr">height</span>: <span class="hljs-string">'250px'</span>,
+        <span class="hljs-attr">newestOnTop</span>: <span class="hljs-literal">false</span>,
+        <span class="hljs-attr">style</span>: <span class="hljs-string">'separate'</span>,
+        <span class="hljs-attr">visible</span>: <span class="hljs-literal">true</span>,
+        <span class="hljs-attr">width</span>: <span class="hljs-string">'600px'</span>
+    }).<span class="hljs-title function_">render</span>();
+});
+</code></pre>
+<p>Sweet.  Now, I can do things like:</p>
+<pre><code class="language-javascript hljs"><span class="hljs-title function_">AUI</span>().<span class="hljs-title function_">use</span>(<span class="hljs-string">'aui-base'</span>, <span class="hljs-keyword">function</span>(<span class="hljs-params">A</span>) {
+    A.<span class="hljs-title function_">log</span>(<span class="hljs-string">"This is some test that will log to the YUI console."</span>);
+});
+</code></pre>
+
+  </div>
+</article>
+
+<hr>
+
+<nav class="post-navigation">
+  <ul>
+    <li>
+      ← Previous: <a href="/thoughts/posts/2016-06-27-liferaycustomnotifications/" rel="prev">Creating custom notifications in Liferay</a>
+    </li>
+    
+    <li>
+      <strong>Next: <a href="/thoughts/posts/2016-08-24-log4jviewer/" rel="next">Log Viewers for Log4J</a> →</strong>
+    </li>
+    
+  </ul>
+</nav>
+    </main>
+
+    <footer></footer>
+
+    <!-- Current page: /posts/2016-06-29-yuidebugging/ -->
+  
+
+</body></html>

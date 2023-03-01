@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<feed xmlns="http://www.w3.org/2005/Atom">
+	<title>That. Just. Happened.</title>
+	<subtitle>A product of contemplation</subtitle>
+	<link href="https://brandnameboredom.github.io/thoughts/feed.xml" rel="self"/>
+	<link href="https://brandnameboredom.github.io/thoughts/"/>
+	
+	<updated>2023-03-01T07:29:39Z</updated>
+	<id>https://brandnameboredom.github.io/thoughts/</id>
+	<author>
+		<name>Brad Turner,</name>
+		<email>youremailaddress@example.com,</email>
+	</author>
+	<entry>
+		<title></title>
+		<link href="https://brandnameboredom.github.io/thoughts/posts/2023-02-27-rust/"/>
+		<updated>2023-03-01T07:29:39Z</updated>
+		<id>https://brandnameboredom.github.io/thoughts/posts/2023-02-27-rust/</id>
+		<content type="html"></content>
+	</entry>
+	<entry>
+		<title>iTerm2 Themes</title>
+		<link href="https://brandnameboredom.github.io/thoughts/posts/2019-04-17-iterm2themes/"/>
+		<updated>2019-04-17T00:00:00Z</updated>
+		<id>https://brandnameboredom.github.io/thoughts/posts/2019-04-17-iterm2themes/</id>
+		<content type="html">&lt;p&gt;I&#39;m still new to MacOS but I&#39;m really enjoying &lt;a href=&quot;https://www.iterm2.com/&quot;&gt;iTerm2&lt;/a&gt;.  I highly recommend you stop here and go get it if you don&#39;t have it installed already.  No, seriously...
+&lt;code&gt;brew cask install iterm2&lt;/code&gt;
+Now that you have iTerm2, I suggest you go grab the &lt;a href=&quot;https://github.com/bhilburn/powerlevel9k&quot;&gt;powerlevel9k&lt;/a&gt; or &lt;a href=&quot;https://denysdovhan.com/spaceship-prompt/&quot;&gt;spaceship&lt;/a&gt; theme asap.  Good stuff.  Check out the links for more information.&lt;/p&gt;</content>
+	</entry>
+	<entry>
+		<title>Experimenting with OpenFaaS</title>
+		<link href="https://brandnameboredom.github.io/thoughts/posts/2019-03-04-openfaas/"/>
+		<updated>2019-03-04T00:00:00Z</updated>
+		<id>https://brandnameboredom.github.io/thoughts/posts/2019-03-04-openfaas/</id>
+		<content type="html">&lt;h1&gt;OpenFaaS&lt;/h1&gt;
+&lt;p&gt;So, what is OpenFaas?  Well, according to the &lt;a href=&quot;https://www.openfaas.com/&quot;&gt;openfaas site&lt;/a&gt; it, in a nutshell, is&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Serverless Functions Made Simple for Docker and Kubernetes&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Alright, you have my attention.&lt;/p&gt;
+&lt;h1&gt;Let&#39;s dive in and take a look around.&lt;/h1&gt;
+&lt;p&gt;Luckily, founder of the OpenFaaS project &lt;a href=&quot;https://www.alexellis.io/&quot;&gt;Alex Ellis&lt;/a&gt; has already provided an extremely &lt;a href=&quot;https://medium.com/devopslinks/getting-started-with-openfaas-on-minikube-634502c7acdf&quot;&gt;helpful guide to getting OpenFaas up and running&lt;/a&gt; on &lt;a href=&quot;https://kubernetes.io/docs/tasks/tools/install-minikube/&quot;&gt;minikube&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;One &lt;em&gt;minor&lt;/em&gt; thing I noticed after walking through the guide is that it doesn&#39;t explicitly mention where to find the UI if you are so inclined so I thought I would leave it here.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;List out the services running in minikube
+&lt;code&gt;minikube service list&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;This should output something like:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;|-------------|------------------|-----------------------------|
+|  NAMESPACE  |       NAME       |             URL             |
+|-------------|------------------|-----------------------------|
+| default     | kubernetes       | No node port                |
+| kube-system | kube-dns         | No node port                |
+| kube-system | tiller-deploy    | No node port                |
+| openfaas    | alertmanager     | No node port                |
+| openfaas    | gateway          | No node port                |
+| openfaas    | gateway-external | http://192.168.99.101:31112 |
+| openfaas    | nats             | No node port                |
+| openfaas    | prometheus       | No node port                |
+|-------------|------------------|-----------------------------|
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Visit the &lt;code&gt;gateway-external&lt;/code&gt; URL and provide the username and password you established earlier in the &lt;a href=&quot;https://medium.com/devopslinks/getting-started-with-openfaas-on-minikube-634502c7acdf&quot;&gt;guide&lt;/a&gt;.  If you are following along exactly this will be &lt;code&gt;admin&lt;/code&gt; for the username and the value of &lt;code&gt;echo $PASSWORD&lt;/code&gt; for the password.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Now that you are in, let&#39;s deploy a new function to generate random ascii art cows.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Click &amp;quot;Deploy New Function&amp;quot;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;In the modal that pops up, search for cows.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;ASCII Cows should be one of, if not the only, function available.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Select the function and click Deploy.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Select the &amp;quot;cows&amp;quot; function in the left panel and note the &amp;quot;Status&amp;quot; field in the right panel.  Once the status is &amp;quot;Ready&amp;quot; click &amp;quot;INVOKE&amp;quot;.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;   /---------o*o
+  / |      ||
+ *  ||-----||
+    ^^     ^^
+Cow that was captured
+  by head-shrinkers
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now, time to deploy some custom functions...&lt;/p&gt;</content>
+	</entry>
+	<entry>
+		<title>Dive</title>
+		<link href="https://brandnameboredom.github.io/thoughts/posts/2018-12-17-dive/"/>
+		<updated>2018-12-17T00:00:00Z</updated>
+		<id>https://brandnameboredom.github.io/thoughts/posts/2018-12-17-dive/</id>
+		<content type="html">&lt;p&gt;I heard about this tool the other day while watching the &lt;a href=&quot;https://www.youtube.com/watch?v=oNa3xK2GFKY&amp;amp;amp=&amp;amp;feature=youtu.be&quot;&gt;Kelsey Hightower keynote from KubeCon/CloudNativeCon&lt;/a&gt; called &lt;a href=&quot;https://github.com/wagoodman/dive&quot;&gt;dive&lt;/a&gt; and decided to play around with it myself.  Spoiler alert...it is pretty nice&lt;/p&gt;
+&lt;p&gt;So. What is dive?&lt;/p&gt;
+&lt;p&gt;Dive provides insight into the layers of your docker image for size optimization purposes.  Through the UI you can quickly discover what was introduced/changed in each layer and iterate on the image via a &lt;code&gt;dive build -t image-tag .&lt;/code&gt; which leads to a much quicker build/analyze image optimization/development cycle.  Also, there is a nifty feature which will provide some rough estimate of how efficient the analyzed image is in terms of space savings so it adds a bit of gamification to the mundane task of image optimization.&lt;/p&gt;
+&lt;p&gt;Anyway, &lt;a href=&quot;https://github.com/wagoodman/dive#installation&quot;&gt;check it out&lt;/a&gt;!&lt;/p&gt;</content>
+	</entry>
+	<entry>
+		<title>The epic battle for Ad freedom rages on...</title>
+		<link href="https://brandnameboredom.github.io/thoughts/posts/2018-12-11-pihole/"/>
+		<updated>2018-12-11T00:00:00Z</updated>
+		<id>https://brandnameboredom.github.io/thoughts/posts/2018-12-11-pihole/</id>
+		<content type="html">&lt;p&gt;Nobody likes advertisements.&lt;/p&gt;
+&lt;img src=&quot;https://media.giphy.com/media/EldfH1VJdbrwY/giphy.gif&quot; alt=&quot;WHAT?!?!&quot; /&gt;
+&lt;p&gt;I know, I know, shocking.&lt;/p&gt;
+&lt;p&gt;It&#39;s ok.  Take a minute to gather yourself after such a mind blowing proclamation.&lt;/p&gt;
+&lt;p&gt;Better?  Good.&lt;/p&gt;
+&lt;p&gt;Advertisements are like that one friend in college who would always remind you of a paper you had due in a couple of hours while you are loading up the third season of Breaking Bad at 2:30 in the morning.  You are pretty sure they were just trying to be helpful but you are also pretty sure you regret whatever life choices you made that brought them into your life.&lt;/p&gt;
+&lt;p&gt;Ads are terrible but they become even more sinister when your kids are old enough to start playing free games on your tablet/phone/whatever.  Your kid ends up beginning with a &amp;quot;Let&#39;s learn the alphabet&amp;quot; type game and end up ordering additional supplies for an army they command within an app they purchased via an ad injected into the loading screen between levels.&lt;/p&gt;
+&lt;p&gt;Not only is this super annoying financially but even if you restrict the purchases they inevitably find themselves on the purchase screen with no idea how to get back to the game.&lt;/p&gt;
+&lt;p&gt;So, after a friend of mine gave me a &lt;a href=&quot;https://www.canakit.com/&quot;&gt;raspberry pi kit from canakit&lt;/a&gt; for my birthday, I decided to do something about these ads.  I installed &lt;a href=&quot;https://pi-hole.net/&quot;&gt;pi-hole&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;What is pi-hole you ask?&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The Pi-hole® is a DNS sinkhole that protects your devices from unwanted content, without installing any client-side software.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;I decided to &lt;a href=&quot;https://www.youtube.com/watch?v=2Ib3o3OVIqI&quot;&gt;configure my router to use the pi-hole as a static DNS server&lt;/a&gt; for all devices on my network.  This way, when my kids are playing a game they are no longer faced with the temptation of an ad but rather a blank screen with a small &#39;X&#39; to escape back to their game.&lt;/p&gt;
+&lt;p&gt;Perfect.&lt;/p&gt;</content>
+	</entry>
+	<entry>
+		<title>AWS Re:Invent 2018</title>
+		<link href="https://brandnameboredom.github.io/thoughts/posts/2018-12-03-aws-reinvent-2018/"/>
+		<updated>2018-12-03T00:00:00Z</updated>
+		<id>https://brandnameboredom.github.io/thoughts/posts/2018-12-03-aws-reinvent-2018/</id>
+		<content type="html">&lt;h1&gt;AWS Re:Invent 2018&lt;/h1&gt;
+&lt;img src=&quot;https://user-images.githubusercontent.com/3187885/49393141-6ddb1300-f6fe-11e8-85ce-6bb301445e64.jpg&quot; alt=&quot;Re:Invent 2018 Keynote&quot; /&gt;
+&lt;p&gt;&lt;a href=&quot;https://reinvent.awsevents.com/&quot;&gt;AWS Re:Invent 2018&lt;/a&gt;.  What can I say?  Wow.  Well played AWS, well played.&lt;/p&gt;
+&lt;p&gt;I have been to a few tech conferences (most notabley &lt;a href=&quot;https://vslive.com/&quot;&gt;Visual Studio Live!&lt;/a&gt; also in Las Vegas) but nothing has even come close to the spectacle AWS put on at Re:Invent 2018.  The conference was &lt;em&gt;huge&lt;/em&gt; with over 2000 breakout sessions and spanning a number of hotels.  I mean, just look at &lt;a href=&quot;https://reinvent.awsevents.com/campus/&quot;&gt;the campus map&lt;/a&gt;.  Insane.&lt;/p&gt;
+&lt;p&gt;As I try to get back into the groove of things I figured I would post a few tips for myself if I&#39;m able to attend Re:Invent in the future.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Session Scheduling
+&lt;ul&gt;
+&lt;li&gt;Schedule sessions according to a single venue for at least a morning/afternoon split.  Transportation between venues via the shuttle service takes upwards of an hour so switching venues between relatively closely scheduled sessions is not feasible.  Also, the chartered shuttle buses smell terrible so ride share when you can.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Session Evals
+&lt;ul&gt;
+&lt;li&gt;Complete a session eval each day of the conference and report back to the Swag/Check-in area to pick up a limited edition pin each day.  Only one eval a day.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Hardware Announcements
+&lt;ul&gt;
+&lt;li&gt;If a new piece of hardware is announced in a keynote, sign up for one of the workshops that day.  Chances are anyone who attends that workshop will get a device free of charge to take home.  This year they announced the &lt;a href=&quot;https://aws.amazon.com/blogs/aws/aws-deepracer-go-hands-on-with-reinforcement-learning-at-reinvent/&quot;&gt;deep racer&lt;/a&gt; and everyone who attended the workshop was gifted one afterward.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Swag
+&lt;ul&gt;
+&lt;li&gt;You are going to get a ton of swag so pack accordingly.  You probably want at least half of a suitcase free to bring stuff home.  I ended up leaving a few shirts in the hotel room because I simply didn&#39;t have the room to bring them home.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;img src=&quot;https://user-images.githubusercontent.com/3187885/49393260-c14d6100-f6fe-11e8-9b83-39328653656e.jpg&quot; alt=&quot;Werner Vogels Keynote&quot; /&gt;</content>
+	</entry>
+	<entry>
+		<title>Resolving localhost</title>
+		<link href="https://brandnameboredom.github.io/thoughts/posts/2018-11-15-hostlocalhostresolution/"/>
+		<updated>2018-11-15T00:00:00Z</updated>
+		<id>https://brandnameboredom.github.io/thoughts/posts/2018-11-15-hostlocalhostresolution/</id>
+		<content type="html">&lt;p&gt;I ran into an issue the other day trying to test out a Jenkins slave docker image I had built to test some dotnetcore code.  I had an instance of &lt;a href=&quot;https://hub.docker.com/_/sonarqube/&quot;&gt;Sonarqube up and running inside of a docker container&lt;/a&gt;.  So, I built my slave container and jumped into the bash of the executing slave container.  Once inside, I wanted to run the following commands:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;dotnet /sonarqube-scanner/SonarScanner.MSBuild.dll begin /k:&amp;quot;myproject&amp;quot; /d:sonar.host.url=http://localhost:9000 /d:sonar.login=&amp;quot;my_sonarqube_provided_login&amp;quot;
+
+dotnet build myproject.sln
+
+dotnet /sonarqube-scanner/SonarScanner.MSBuild.dll end
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;However, I realized that the command would fail because the &amp;quot;localhost&amp;quot; within the sonar.host.url parameter would resolve to the scanner container and not my host machine.  So, how do we address that?  Well, the correct answer is probably create a docker-compose pod network and change localhost to the appropriate name within the compose file.  Now that we have that disclaimer out of the way, we can talk about what I did.  Turns out, docker has this property you can use to get access to the localhost on the host machine running the container.  In my case, this means access to the Sonarqube scanner container running at localhost:9000.  So, I updated my commands to look like:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;dotnet /sonarqube-scanner/SonarScanner.MSBuild.dll begin /k:&amp;quot;myproject&amp;quot; /d:sonar.host.url=http://docker.for.mac.localhost:9000 /d:sonar.login=&amp;quot;my_sonarqube_provided_login&amp;quot;
+
+dotnet build myproject.sln
+
+dotnet /sonarqube-scanner/SonarScanner.MSBuild.dll end
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Executed them and everything resolved and executed without error.  Sweet!  On to the next problem...&lt;/p&gt;
+&lt;p&gt;FYI there is a windows version of the docker.for.mac.localhost property.  I bet you can guess what it is but in case you are feeling lazy today it is docker.for.win.localhost&lt;/p&gt;</content>
+	</entry>
+	<entry>
+		<title>The Phoenix Project</title>
+		<link href="https://brandnameboredom.github.io/thoughts/posts/2018-10-29-thephoenixproject/"/>
+		<updated>2018-10-29T00:00:00Z</updated>
+		<id>https://brandnameboredom.github.io/thoughts/posts/2018-10-29-thephoenixproject/</id>
+		<content type="html">&lt;p&gt;We&#39;ve recently had a consultant from RedHat on site helping to get our on-prem solution stood up.  One day, while at lunch, he suggested a colleague and I pick up a copy of &amp;quot;The Phoenix Project&amp;quot; by Gene Kim, Kevin Behr, and George Spafford.  I was shocked how eerily familiar many of the characters portrayed in the book felt while reading.  If you have the time, and honestly even if you don&#39;t, pick up a copy for yourself.  Here is a sample from the book available for purchase on amazon in your preferred format.&lt;/p&gt;
+&lt;iframe type=&quot;text/html&quot; width=&quot;336&quot; height=&quot;550&quot; frameborder=&quot;0&quot; allowfullscreen style=&quot;max-width:100%&quot; src=&quot;https://read.amazon.com/kp/card?asin=B078Y98RG8&amp;preview=inline&amp;linkCode=kpe&amp;ref_=cm_sw_r_kb_dp_S711BbP3N64Z8&amp;tag=mobilea053c12-20&quot; &gt;&lt;/iframe&gt;</content>
+	</entry>
+	<entry>
+		<title>Buildah</title>
+		<link href="https://brandnameboredom.github.io/thoughts/posts/2018-10-10-buildah/"/>
+		<updated>2018-10-10T00:00:00Z</updated>
+		<id>https://brandnameboredom.github.io/thoughts/posts/2018-10-10-buildah/</id>
+		<content type="html">&lt;p&gt;I was doing some research on &lt;a href=&quot;https://github.com/containers/buildah&quot;&gt;buildah&lt;/a&gt; recently and decided to try to play around with a simple speedtest app we had on hand.  This app is a fork of &lt;a href=&quot;https://github.com/adolfintel/speedtest&quot;&gt;this repository&lt;/a&gt; on GitHub and does exactly what you would expect.  So, since we already had a Dockerfile defined for the app I decided to utilize the &lt;code&gt;bud&lt;/code&gt; capability within buildah to &lt;code&gt;build using dockerfile (bud)&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;buildah bud -f Dockerfile -t test .&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;I didn&#39;t have to specify &lt;code&gt;-f Dockerfile&lt;/code&gt; because the &lt;code&gt;bud&lt;/code&gt; capability defaults to &lt;code&gt;Dockerfile&lt;/code&gt; but whatever.  Once the image was build from the Dockerfile and tagged with the &amp;quot;test&amp;quot; label I was ready to grab a reference to the container and execute my python command.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;test_var=$(buildah from test)&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Now that &lt;code&gt;test_var&lt;/code&gt; has my reference, I can tell buildah to run it with whatever command I would like.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;buildah run $test_var python -m flask run --host=0.0.0.0 --port=5000&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Bingo.  Speedtest is now running and I can hit the site at &lt;code&gt;localhost:5000&lt;/code&gt;.  I did notice though that a call to &lt;code&gt;buildah images&lt;/code&gt; as compared to &lt;code&gt;docker images&lt;/code&gt; reveals that the buildah generated image is slightly larger than the one generated using the &lt;code&gt;docker build&lt;/code&gt; command.  Hmmm...interesting...&lt;/p&gt;</content>
+	</entry>
+	<entry>
+		<title>ConfigMap VolumeMount File Overwrite</title>
+		<link href="https://brandnameboredom.github.io/thoughts/posts/2018-09-19-configmapvolumemounts/"/>
+		<updated>2018-09-19T00:00:00Z</updated>
+		<id>https://brandnameboredom.github.io/thoughts/posts/2018-09-19-configmapvolumemounts/</id>
+		<content type="html">&lt;h1&gt;Openshift/Keycloak Config&lt;/h1&gt;
+&lt;p&gt;I was integrating keycloak configuration into my create-react generated app today when I stumbled upon an issue attempting to mount my configmap within my container in Openshift.&lt;/p&gt;
+&lt;p&gt;I thought I would be able to simply supply the mountpath down to the file I wanted to inject&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;containers:
+- volumeMounts:
+  - name: cloakconfig
+    mountPath: /public/keycloak.json
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;I found, after stumbling upon [this Kubernetes issues], that I needed to specify a subpath of the specific file name I wanted to overwrite:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;containers:
+- volumeMounts:
+  - name: cloakconfig
+    mountPath: /public/keycloak.json
+    subPath: keycloak.json
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now, when I deploy the app, the keycloak.json file is properly overwritten with the information I&#39;m providing within my deployment config template.  Nice.&lt;/p&gt;</content>
+	</entry>
+</feed>

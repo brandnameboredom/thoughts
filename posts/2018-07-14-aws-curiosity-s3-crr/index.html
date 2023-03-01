@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS Curiosities - S3 Cross Region Replication</title>
+    <meta name="description" content="AWS Curiosities - S3 Cross Region Replication">
+    <link rel="stylesheet" href="/thoughts/pagefind/pagefind-ui.css"><link rel="stylesheet" href="/thoughts/styles.css">
+    <link rel="alternate" href="/thoughts/feed.xml" type="application/atom+xml" title="That. Just. Happened.">
+    <link rel="alternate" href="/thoughts/feed.json" type="application/json" title="That. Just. Happened.">
+  <script type="text/javascript" src="/thoughts/pagefind/pagefind-ui.js"></script><script type="text/javascript">window.addEventListener('DOMContentLoaded', () => { new PagefindUI({"element":"#search","showImages":false,"showEmptyFilters":true,"resetStyles":false,"bundlePath":"/thoughts/pagefind/","baseUrl":"/thoughts/"}); });</script></head>
+  <body>
+    <nav class="navbar">
+      <a href="/thoughts/" class="navbar-home">
+        <strong>That. Just. Happened.</strong>
+      </a>
+
+      <ul class="navbar-links">
+        <li>
+          <a href="/thoughts/">
+            Home
+          </a>
+        </li>
+        <li>
+          <a href="/thoughts/posts/">
+            Archive
+          </a>
+        </li>
+        <li>
+          <a href="/thoughts/about/">
+            About Me
+          </a>
+        </li>
+      </ul>
+
+      <div class="navbar-search">
+        <div id="search"></div>
+      </div>
+    </nav>
+
+    <main class="body-post">
+      <article class="post" data-pagefind-body="">
+  <div class="post-header">
+    <h1 class="post-title">AWS Curiosities - S3 Cross Region Replication</h1>
+
+    <nav class="post-tags">
+    
+      <a href="/thoughts/tags/AWS/" class="tag">AWS</a>
+    
+      <a href="/thoughts/tags/S3/" class="tag">S3</a>
+    
+    </nav>
+
+    <time class="post-date" datetime="2018-07-14 00:00:00">
+      July 14th, 2018
+    </time>
+  </div>
+
+  <div class="post-body">
+    <h1>S3</h1>
+<h2>Cross Region Replication</h2>
+<p>When two s3 buckets are configured for cross region replication and a deletion marker is created for a file in one of the s3 buckets it is replicated over to the linked s3 bucket.  However, if the deletion marker is itself deleted, that action is not replicated. Also, if a specific version of the file is deleted that will also not be replicated.</p>
+<p>Hmm.</p>
+<p>My assumption is that these items are not replicated because these are subtractive operations.  The original deletion marker is considered a new object so s3 replicates it to the destination bucket while the removal of the deletion marker (or specific file version) does not add any new objects and therefore is not replicated.</p>
+<p>Still a bit odd though...</p>
+<p>For more information you can check out <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/crr-what-is-isnot-replicated.html">what is and what is not replicated</a>.</p>
+
+  </div>
+</article>
+
+<hr>
+
+<nav class="post-navigation">
+  <ul>
+    <li>
+      ← Previous: <a href="/thoughts/posts/2018-05-22-gvisor/" rel="prev">gVisor</a>
+    </li>
+    
+    <li>
+      <strong>Next: <a href="/thoughts/posts/2018-08-01-pok3r/" rel="next">60%</a> →</strong>
+    </li>
+    
+  </ul>
+</nav>
+    </main>
+
+    <footer></footer>
+
+    <!-- Current page: /posts/2018-07-14-aws-curiosity-s3-crr/ -->
+  
+
+</body></html>

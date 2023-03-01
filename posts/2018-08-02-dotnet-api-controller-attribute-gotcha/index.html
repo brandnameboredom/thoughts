@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[FromQuery] collection type fail</title>
+    <meta name="description" content="[FromQuery] collection type fail">
+    <link rel="stylesheet" href="/thoughts/pagefind/pagefind-ui.css"><link rel="stylesheet" href="/thoughts/styles.css">
+    <link rel="alternate" href="/thoughts/feed.xml" type="application/atom+xml" title="That. Just. Happened.">
+    <link rel="alternate" href="/thoughts/feed.json" type="application/json" title="That. Just. Happened.">
+  <script type="text/javascript" src="/thoughts/pagefind/pagefind-ui.js"></script><script type="text/javascript">window.addEventListener('DOMContentLoaded', () => { new PagefindUI({"element":"#search","showImages":false,"showEmptyFilters":true,"resetStyles":false,"bundlePath":"/thoughts/pagefind/","baseUrl":"/thoughts/"}); });</script></head>
+  <body>
+    <nav class="navbar">
+      <a href="/thoughts/" class="navbar-home">
+        <strong>That. Just. Happened.</strong>
+      </a>
+
+      <ul class="navbar-links">
+        <li>
+          <a href="/thoughts/">
+            Home
+          </a>
+        </li>
+        <li>
+          <a href="/thoughts/posts/">
+            Archive
+          </a>
+        </li>
+        <li>
+          <a href="/thoughts/about/">
+            About Me
+          </a>
+        </li>
+      </ul>
+
+      <div class="navbar-search">
+        <div id="search"></div>
+      </div>
+    </nav>
+
+    <main class="body-post">
+      <article class="post" data-pagefind-body="">
+  <div class="post-header">
+    <h1 class="post-title">[FromQuery] collection type fail</h1>
+
+    <nav class="post-tags">
+    
+      <a href="/thoughts/tags/dotnetcore/" class="tag">dotnetcore</a>
+    
+      <a href="/thoughts/tags/api/" class="tag">api</a>
+    
+      <a href="/thoughts/tags/attribute/" class="tag">attribute</a>
+    
+      <a href="/thoughts/tags/controller/" class="tag">controller</a>
+    
+      <a href="/thoughts/tags/collections/" class="tag">collections</a>
+    
+    </nav>
+
+    <time class="post-date" datetime="2018-08-02 00:00:00">
+      August 2nd, 2018
+    </time>
+  </div>
+
+  <div class="post-body">
+    <p>Ran into this issue today and wanted to document it here in case I stumbled upon it again.  I have a very simple API controller with a GET method to retrieve detailed information on some objects from the data store.  The method accepts a collection of id values.  Here is the API class and method signatures:</p>
+<pre><code>[Route("api/[controller]")]
+[ApiController]
+public class ItemController : Controller
+{
+
+  [HttpGet]
+  public string GetDetails([FromQuery]int[] ids)
+</code></pre>
+<p>I was using Insomnia Rest to make a GET request to my controller using the following URL value:</p>
+<pre><code>localhost:5000/api/item/getdetails?ids=1&amp;ids=2&amp;ids=3
+</code></pre>
+<p>Sweet.  Good to go.  Click "Send" in Insomnia and watch my glorious integer array pass along my values and filter out my data.</p>
+<p>Nope.</p>
+<p>My integer array has a length of 0.</p>
+<p>Wait. What? How?</p>
+<p><img src="https://media.giphy.com/media/3ornk6UHtk276vLtkY/giphy.gif" alt="No. That's not true. That's Impossible!"></p>
+<p>Turns out there <a href="https://github.com/aspnet/Mvc/issues/7712">is a bug</a>.  Apparently, the <code>[ApiController]</code> attribute breaks the <code>[FromQuery]</code> attribute for collection types in the version of dotnetcore I'm using.</p>
+<p>Remove the <code>[ApiController]</code> attribute and all is well again.</p>
+<p>Or</p>
+<p>Specify the parameter name in the <code>[FromQuery]</code> attribute like <code>[FromQuery(Name="ids")]</code> and all is well again.</p>
+<p>Oh, in case you are wondering.  I'm currently running:</p>
+<p>Dotnet Version 2.1.301 Commit 59524873d6</p>
+
+  </div>
+</article>
+
+<hr>
+
+<nav class="post-navigation">
+  <ul>
+    <li>
+      ← Previous: <a href="/thoughts/posts/2018-08-01-pok3r/" rel="prev">60%</a>
+    </li>
+    
+    <li>
+      <strong>Next: <a href="/thoughts/posts/2018-08-28-reactrouterv4redirect/" rel="next">React-Router v4 Redirect with Redux</a> →</strong>
+    </li>
+    
+  </ul>
+</nav>
+    </main>
+
+    <footer></footer>
+
+    <!-- Current page: /posts/2018-08-02-dotnet-api-controller-attribute-gotcha/ -->
+  
+
+</body></html>

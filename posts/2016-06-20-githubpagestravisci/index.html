@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuring GitHub Pages and Travis CI</title>
+    <meta name="description" content="Configuring GitHub Pages and Travis CI">
+    <link rel="stylesheet" href="/thoughts/pagefind/pagefind-ui.css"><link rel="stylesheet" href="/thoughts/styles.css">
+    <link rel="alternate" href="/thoughts/feed.xml" type="application/atom+xml" title="That. Just. Happened.">
+    <link rel="alternate" href="/thoughts/feed.json" type="application/json" title="That. Just. Happened.">
+  <script type="text/javascript" src="/thoughts/pagefind/pagefind-ui.js"></script><script type="text/javascript">window.addEventListener('DOMContentLoaded', () => { new PagefindUI({"element":"#search","showImages":false,"showEmptyFilters":true,"resetStyles":false,"bundlePath":"/thoughts/pagefind/","baseUrl":"/thoughts/"}); });</script></head>
+  <body>
+    <nav class="navbar">
+      <a href="/thoughts/" class="navbar-home">
+        <strong>That. Just. Happened.</strong>
+      </a>
+
+      <ul class="navbar-links">
+        <li>
+          <a href="/thoughts/">
+            Home
+          </a>
+        </li>
+        <li>
+          <a href="/thoughts/posts/">
+            Archive
+          </a>
+        </li>
+        <li>
+          <a href="/thoughts/about/">
+            About Me
+          </a>
+        </li>
+      </ul>
+
+      <div class="navbar-search">
+        <div id="search"></div>
+      </div>
+    </nav>
+
+    <main class="body-post">
+      <article class="post" data-pagefind-body="">
+  <div class="post-header">
+    <h1 class="post-title">Configuring GitHub Pages and Travis CI</h1>
+
+    <nav class="post-tags">
+    
+      <a href="/thoughts/tags/GitHub/" class="tag">GitHub</a>
+    
+      <a href="/thoughts/tags/Pages/" class="tag">Pages</a>
+    
+      <a href="/thoughts/tags/Travis/" class="tag">Travis</a>
+    
+      <a href="/thoughts/tags/CI/" class="tag">CI</a>
+    
+    </nav>
+
+    <time class="post-date" datetime="2016-06-20 00:00:00">
+      June 20th, 2016
+    </time>
+  </div>
+
+  <div class="post-body">
+    <img src="https://cdn.travis-ci.com/images/logos/TravisCI-Mascot-1-bc6a3179f3e8e1ab1456634bd55a448a.png" alt="Travis CI" width="200" style="display: block;margin-left: auto;margin-right: auto;">
+<p>I'm new to <a href="https://travis-ci.org/">Travis CI</a>.  Almost all of the CI experience I have is with <a href="https://www.jetbrains.com/teamcity/">TeamCity</a> and <a href="https://www.visualstudio.com/products/tfs-overview-vs">TFS</a>.  So, I thought I would use this GitHub pages site as an excuse to play with setting up a new-to-me CI system.  I started out following the <a href="https://help.github.com/articles/viewing-jekyll-build-error-messages/#configuring-a-third-party-service-to-display-jekyll-build-error-messages">GitHub help documentation</a> on the subject hoping to get the site to build.  Heh, small wins.  The exact steps I followed are:</p>
+<ul>
+<li>
+<p>Create a file named "Gemfile" in the root folder with the following content:</p>
+<blockquote>
+<p>source 'https://rubygems.org'<br>
+gem 'github-pages'</p>
+</blockquote>
+</li>
+<li>
+<p>Create a file named ".travis.yml" in the root folder with the contents:</p>
+<blockquote>
+<p>language: ruby<br>
+script: "bundle exec jekyll build"</p>
+</blockquote>
+</li>
+<li>
+<p>Setup Travis CI to "watch" your GitHub pages repo</p>
+</li>
+</ul>
+<p>After reading these instructions I'm thinking "Alright, that sounds pretty straightforward" but the build fails with the comment:</p>
+<blockquote>
+<p>An error occurred while installing public_suffix (1.5.3), and Bundler cannot continue.<br>
+Make sure that 'get install public_suffix -v '1.5.3' succeeds before bundling.</p>
+</blockquote>
+<p>What.  Then I noticed this line a few lines up in the build log:</p>
+<blockquote>
+<p>Gem::InstallError: public_suffix requires Ruby version &gt;= 2.0.</p>
+</blockquote>
+<p>Ahhh I see.  Travis CI must be using a version of Ruby that is too old as part of it's default configuration.  So, how do we tell Travis to run a different version of Ruby?  Simple.  Add the following line to the .travis.yml file:</p>
+<blockquote>
+<p>rvm: 2.1.1</p>
+</blockquote>
+<p>Done.  Build succeeds and life is grand.</p>
+<p>Oh, and apparently I'm <a href="https://github.com/github/pages-gem/issues/122">not the only one that has had this issue</a>.  In fact, this individual <a href="https://github.com/github/pages-gem/issues/122#issuecomment-158942037">spells it out quite nicely</a>.</p>
+
+  </div>
+</article>
+
+<hr>
+
+<nav class="post-navigation">
+  <ul>
+    <li>
+      ← Previous: <a href="/thoughts/posts/2016-06-15-hsqldatabasemanager/" rel="prev">HSQL Database Manager</a>
+    </li>
+    
+    <li>
+      <strong>Next: <a href="/thoughts/posts/2016-06-27-liferaycustomnotifications/" rel="next">Creating custom notifications in Liferay</a> →</strong>
+    </li>
+    
+  </ul>
+</nav>
+    </main>
+
+    <footer></footer>
+
+    <!-- Current page: /posts/2016-06-20-githubpagestravisci/ -->
+  
+
+</body></html>

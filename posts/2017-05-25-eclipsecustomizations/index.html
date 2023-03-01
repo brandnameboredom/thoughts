@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customizing Eclipse</title>
+    <meta name="description" content="Customizing Eclipse">
+    <link rel="stylesheet" href="/thoughts/pagefind/pagefind-ui.css"><link rel="stylesheet" href="/thoughts/styles.css">
+    <link rel="alternate" href="/thoughts/feed.xml" type="application/atom+xml" title="That. Just. Happened.">
+    <link rel="alternate" href="/thoughts/feed.json" type="application/json" title="That. Just. Happened.">
+  <script type="text/javascript" src="/thoughts/pagefind/pagefind-ui.js"></script><script type="text/javascript">window.addEventListener('DOMContentLoaded', () => { new PagefindUI({"element":"#search","showImages":false,"showEmptyFilters":true,"resetStyles":false,"bundlePath":"/thoughts/pagefind/","baseUrl":"/thoughts/"}); });</script></head>
+  <body>
+    <nav class="navbar">
+      <a href="/thoughts/" class="navbar-home">
+        <strong>That. Just. Happened.</strong>
+      </a>
+
+      <ul class="navbar-links">
+        <li>
+          <a href="/thoughts/">
+            Home
+          </a>
+        </li>
+        <li>
+          <a href="/thoughts/posts/">
+            Archive
+          </a>
+        </li>
+        <li>
+          <a href="/thoughts/about/">
+            About Me
+          </a>
+        </li>
+      </ul>
+
+      <div class="navbar-search">
+        <div id="search"></div>
+      </div>
+    </nav>
+
+    <main class="body-post">
+      <article class="post" data-pagefind-body="">
+  <div class="post-header">
+    <h1 class="post-title">Customizing Eclipse</h1>
+
+    <nav class="post-tags">
+    
+      <a href="/thoughts/tags/Eclipse/" class="tag">Eclipse</a>
+    
+      <a href="/thoughts/tags/Customizations/" class="tag">Customizations</a>
+    
+    </nav>
+
+    <time class="post-date" datetime="2017-05-25 00:00:00">
+      May 25th, 2017
+    </time>
+  </div>
+
+  <div class="post-body">
+    <h1>Toggle Breakpoint</h1>
+<p>One of the most frustrating things for me when transitioning from the default setup in <a href="https://www.visualstudio.com/">Visual Studio</a> to <a href="https://eclipse.org/">Eclipse</a> has been the change in keybindings for toggling a breakpoint.  I tried setting the "Toggle Breakpoint" key binding in</p>
+<blockquote>
+<p><em>Window</em> -&gt; <em>Preferences</em> -&gt; <em>General</em> -&gt; <em>Keys</em></p>
+</blockquote>
+<p>but it did nothing for me while my cursor was active in the editing window.  A quick Google search and I stumbled upon <a href="http://stackoverflow.com/a/3605724/70130">this</a> answer on <a href="http://www.stackoverflow.com">StackOverflow</a>.  Turns out, key bindings are related to the perspectives in Eclipse and I needed to enable the "Breakpoints" command group for my perspective.  So,</p>
+<blockquote>
+<p><em>Window</em> -&gt; <em>Customize perspective</em> -&gt; <em>Command Groups Availability</em></p>
+</blockquote>
+<p>and select "breakpoints".  Now, my custom binding of F9 to the "Toggle Breakpoint" action is usable from the editor window.  Sweet.</p>
+<h1>Theme</h1>
+<p>Now, dark theme.  <a href="https://www.visualstudio.com/">Visual Studio</a> offers a pretty nice dark theme "out of the box" but the dark theme in <a href="https://eclipse.org/">Eclipse</a> is...well...junk.  I've tried a number of dark themes but nothing has been able to compare to the <a href="https://marketplace.eclipse.org/content/darkest-dark-theme">Darkest Dark Theme</a>.  This theme is EXACTLY what I was hoping to find.  Clean.  Polished.  Also, <a href="https://www.genuitec.com/products/devstyle/">actively supported</a> at the time of this writing.</p>
+
+  </div>
+</article>
+
+<hr>
+
+<nav class="post-navigation">
+  <ul>
+    <li>
+      ← Previous: <a href="/thoughts/posts/2016-08-24-log4jviewer/" rel="prev">Log Viewers for Log4J</a>
+    </li>
+    
+    <li>
+      <strong>Next: <a href="/thoughts/posts/2018-04-05-nexusdocker/" rel="next">Running a local Docker registry in Nexus</a> →</strong>
+    </li>
+    
+  </ul>
+</nav>
+    </main>
+
+    <footer></footer>
+
+    <!-- Current page: /posts/2017-05-25-eclipsecustomizations/ -->
+  
+
+</body></html>

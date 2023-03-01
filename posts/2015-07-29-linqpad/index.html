@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinqPad</title>
+    <meta name="description" content="LinqPad">
+    <link rel="stylesheet" href="/thoughts/pagefind/pagefind-ui.css"><link rel="stylesheet" href="/thoughts/styles.css">
+    <link rel="alternate" href="/thoughts/feed.xml" type="application/atom+xml" title="That. Just. Happened.">
+    <link rel="alternate" href="/thoughts/feed.json" type="application/json" title="That. Just. Happened.">
+  <script type="text/javascript" src="/thoughts/pagefind/pagefind-ui.js"></script><script type="text/javascript">window.addEventListener('DOMContentLoaded', () => { new PagefindUI({"element":"#search","showImages":false,"showEmptyFilters":true,"resetStyles":false,"bundlePath":"/thoughts/pagefind/","baseUrl":"/thoughts/"}); });</script></head>
+  <body>
+    <nav class="navbar">
+      <a href="/thoughts/" class="navbar-home">
+        <strong>That. Just. Happened.</strong>
+      </a>
+
+      <ul class="navbar-links">
+        <li>
+          <a href="/thoughts/">
+            Home
+          </a>
+        </li>
+        <li>
+          <a href="/thoughts/posts/">
+            Archive
+          </a>
+        </li>
+        <li>
+          <a href="/thoughts/about/">
+            About Me
+          </a>
+        </li>
+      </ul>
+
+      <div class="navbar-search">
+        <div id="search"></div>
+      </div>
+    </nav>
+
+    <main class="body-post">
+      <article class="post" data-pagefind-body="">
+  <div class="post-header">
+    <h1 class="post-title">LinqPad</h1>
+
+    <nav class="post-tags">
+    
+      <a href="/thoughts/tags/LinqPad/" class="tag">LinqPad</a>
+    
+    </nav>
+
+    <time class="post-date" datetime="2015-07-29 00:00:00">
+      July 29th, 2015
+    </time>
+  </div>
+
+  <div class="post-body">
+    <img src="http://s3.amazonaws.com/uploads.uservoice.com/logo/page/18302/original/LINQPad.png?1265071680" alt="LinqPad">
+<p>If you are not sure what LinqPad is or why you should be using it, take a moment and go <a href="https://www.linqpad.net">check it out</a>.</p>
+<p>I use <a href="https://www.linqpad.net">LinqPad</a> all the time.  As a .NET developer, it is my go-to scratchpad for spike development and has almost completely removed my dependency upon <a href="https://msdn.microsoft.com/en-us/library/ms174173.aspx">SQL Server Management Studio</a> for data analysis and query construction.  Since I use LinqPad all the time, I have stumbled upon a few things to make my life easier when dealing with connection information in referenced code and data analysis of stored procedure result sets within Linqpad.  Hopefully by jotting these down here, I'll be able to find this information easily next time.</p>
+<h2>Overriding ConnectionString Information</h2>
+<p>While this isn't really LinqPad specific, I recently used this solution to overwrite the connection information used by a bit of internal code we were referencing with the current LinqPad connection.  First, we need to tell our configuration collection that all of the connection strings should not be read only.  To do this we need to find the "Read Only" property in the ConfigurationManager.ConnectionStrings collection and set that propery to false so we can overwrite that information with our custom definition:</p>
+<pre><code class="language-csharp hljs"><span class="hljs-comment">// **Note: This relies on the property name "bReadOnly".  </span>
+<span class="hljs-comment">// 		   If this property name is changed this will no longer work.</span>
+<span class="hljs-keyword">typeof</span>(ConfigurationElementCollection)
+	.GetField(<span class="hljs-string">"bReadOnly"</span>, BindingFlags.Instance | BindingFlags.NonPublic)
+	.SetValue(ConfigurationManager.ConnectionStrings, <span class="hljs-literal">false</span>); 
+</code></pre>
+<p>Now that we can manipulate the connection string collection, we need to locate the one used by the code we are refrencing and replace it with the current connection within LinqPad.</p>
+<pre><code class="language-csharp hljs"><span class="hljs-comment">//Add the current LinqPad connection string with the name </span>
+<span class="hljs-comment">//"myConnection" which is what my referenced code uses to connect</span>
+ConfigurationManager.ConnectionStrings
+	.Add(
+		<span class="hljs-keyword">new</span> System.Configuration.ConnectionStringSettings(
+			<span class="hljs-string">"myConnection"</span>, 
+			<span class="hljs-keyword">this</span>.Connection.ConnectionString)
+		);
+</code></pre>
+<h2>Filtering Stored Procedure Results</h2>
+<p>After executing a stored procedure within LinqPad, I wanted a way to filter through the results for a specific item in order to retrieve my value of interest.  I decided to use the generic <a href="https://msdn.microsoft.com/en-us/library/bb386916(v=vs.110).aspx">Field</a> method to pull the value I wanted to filter by for each record in the dataset.  This allows me to extract what I want from the dataset using a simple Where clause.</p>
+<pre><code class="language-csharp hljs"><span class="hljs-comment">//Call the Stored Procedure and access the dataset</span>
+<span class="hljs-keyword">var</span> data = usp_MyStoredProc (param1, param2).Tables[<span class="hljs-number">0</span>];
+data
+	.AsEnumerable()
+	.Where(x =&gt; x.Field&lt;<span class="hljs-built_in">int</span>&gt;(<span class="hljs-string">"Id"</span>) == <span class="hljs-number">1234</span>).Dump();
+</code></pre>
+<h2>Useful Extensions</h2>
+<p>Here is a list of some other <a href="http://stackoverflow.com/a/3562160">useful extensions</a>.</p>
+
+  </div>
+</article>
+
+<hr>
+
+<nav class="post-navigation">
+  <ul>
+    <li>
+      <strong>Next: <a href="/thoughts/posts/2016-01-04-runtimebroker/" rel="next">Runtime Broker</a> →</strong>
+    </li>
+    
+  </ul>
+</nav>
+    </main>
+
+    <footer></footer>
+
+    <!-- Current page: /posts/2015-07-29-linqpad/ -->
+  
+
+</body></html>

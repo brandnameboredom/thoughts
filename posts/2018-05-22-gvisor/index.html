@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>gVisor</title>
+    <meta name="description" content="gVisor">
+    <link rel="stylesheet" href="/thoughts/pagefind/pagefind-ui.css"><link rel="stylesheet" href="/thoughts/styles.css">
+    <link rel="alternate" href="/thoughts/feed.xml" type="application/atom+xml" title="That. Just. Happened.">
+    <link rel="alternate" href="/thoughts/feed.json" type="application/json" title="That. Just. Happened.">
+  <script type="text/javascript" src="/thoughts/pagefind/pagefind-ui.js"></script><script type="text/javascript">window.addEventListener('DOMContentLoaded', () => { new PagefindUI({"element":"#search","showImages":false,"showEmptyFilters":true,"resetStyles":false,"bundlePath":"/thoughts/pagefind/","baseUrl":"/thoughts/"}); });</script></head>
+  <body>
+    <nav class="navbar">
+      <a href="/thoughts/" class="navbar-home">
+        <strong>That. Just. Happened.</strong>
+      </a>
+
+      <ul class="navbar-links">
+        <li>
+          <a href="/thoughts/">
+            Home
+          </a>
+        </li>
+        <li>
+          <a href="/thoughts/posts/">
+            Archive
+          </a>
+        </li>
+        <li>
+          <a href="/thoughts/about/">
+            About Me
+          </a>
+        </li>
+      </ul>
+
+      <div class="navbar-search">
+        <div id="search"></div>
+      </div>
+    </nav>
+
+    <main class="body-post">
+      <article class="post" data-pagefind-body="">
+  <div class="post-header">
+    <h1 class="post-title">gVisor</h1>
+
+    <nav class="post-tags">
+    
+      <a href="/thoughts/tags/gVisor/" class="tag">gVisor</a>
+    
+    </nav>
+
+    <time class="post-date" datetime="2018-05-22 00:00:00">
+      May 22nd, 2018
+    </time>
+  </div>
+
+  <div class="post-body">
+    <p>I was listening to the <a href="https://play.google.com/music/m/I7y6dcw7rt2phdnu32tfsqjfqha?t=Kubernetes_Podcast_from_Google">Kubernetes Podcast from Google</a> this morning and was inspired to go checkout <a href="https://github.com/google/gvisor">gVisor</a> after listening to the <a href="https://play.google.com/music/m/Dewp76xo6zv44e2tcjkrqqalwbe?t=gVisor_with_Nicolas_Lacasse_and_Yoshi_Tamura-Kubernetes_Podcast_from_Google">episode from May 15th</a>.  So, what is gVisor?</p>
+<blockquote>
+<p>gVisor is a user-space kernel, written in Go, that implements a substantial portion of the Linux system surface. It includes an Open Container Initiative (OCI) runtime called runsc that provides an isolation boundary between the application and the host kernel. The runsc runtime integrates with Docker and Kubernetes, making it simple to run sandboxed containers.</p>
+</blockquote>
+<p>So, up until this point there have been two main solutions:</p>
+<ul>
+<li>Hypervisor containers (containers which create a fresh new VM with each instance)</li>
+<li>Namespaced containers (containers which level linux kernel namespaces to isolate resources)</li>
+</ul>
+<p>Enter gVisor.</p>
+<p>To me gVisor seems like an intermediate step between the two existing options.  It is an intermediate layer that transposes around half of the linux syscalls and provides more security than namespaced containers and less security than hypervisor containers.  I'm sure there is an overhead cost incurred during the translation between the user-spaced kernel implementation and the actual kernel but still...it's nice to have options.</p>
+<p>Check out this <a href="https://youtu.be/TJJT8wc0T_c">demo</a> from kubecon to see it all in action.</p>
+
+  </div>
+</article>
+
+<hr>
+
+<nav class="post-navigation">
+  <ul>
+    <li>
+      ← Previous: <a href="/thoughts/posts/2018-04-25-jenkins-minishift-dotnet/" rel="prev">Running a dotnet pipeline in jenkins within minishift</a>
+    </li>
+    
+    <li>
+      <strong>Next: <a href="/thoughts/posts/2018-07-14-aws-curiosity-s3-crr/" rel="next">AWS Curiosities - S3 Cross Region Replication</a> →</strong>
+    </li>
+    
+  </ul>
+</nav>
+    </main>
+
+    <footer></footer>
+
+    <!-- Current page: /posts/2018-05-22-gvisor/ -->
+  
+
+</body></html>

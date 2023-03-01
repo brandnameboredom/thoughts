@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Experimenting with OpenFaaS</title>
+    <meta name="description" content="Experimenting with OpenFaaS">
+    <link rel="stylesheet" href="/thoughts/pagefind/pagefind-ui.css"><link rel="stylesheet" href="/thoughts/styles.css">
+    <link rel="alternate" href="/thoughts/feed.xml" type="application/atom+xml" title="That. Just. Happened.">
+    <link rel="alternate" href="/thoughts/feed.json" type="application/json" title="That. Just. Happened.">
+  <script type="text/javascript" src="/thoughts/pagefind/pagefind-ui.js"></script><script type="text/javascript">window.addEventListener('DOMContentLoaded', () => { new PagefindUI({"element":"#search","showImages":false,"showEmptyFilters":true,"resetStyles":false,"bundlePath":"/thoughts/pagefind/","baseUrl":"/thoughts/"}); });</script></head>
+  <body>
+    <nav class="navbar">
+      <a href="/thoughts/" class="navbar-home">
+        <strong>That. Just. Happened.</strong>
+      </a>
+
+      <ul class="navbar-links">
+        <li>
+          <a href="/thoughts/">
+            Home
+          </a>
+        </li>
+        <li>
+          <a href="/thoughts/posts/">
+            Archive
+          </a>
+        </li>
+        <li>
+          <a href="/thoughts/about/">
+            About Me
+          </a>
+        </li>
+      </ul>
+
+      <div class="navbar-search">
+        <div id="search"></div>
+      </div>
+    </nav>
+
+    <main class="body-post">
+      <article class="post" data-pagefind-body="">
+  <div class="post-header">
+    <h1 class="post-title">Experimenting with OpenFaaS</h1>
+
+    <nav class="post-tags">
+    
+      <a href="/thoughts/tags/OpenFaaS/" class="tag">OpenFaaS</a>
+    
+    </nav>
+
+    <time class="post-date" datetime="2019-03-04 00:00:00">
+      March 4th, 2019
+    </time>
+  </div>
+
+  <div class="post-body">
+    <h1>OpenFaaS</h1>
+<p>So, what is OpenFaas?  Well, according to the <a href="https://www.openfaas.com">openfaas site</a> it, in a nutshell, is</p>
+<blockquote>
+<p>Serverless Functions Made Simple for Docker and Kubernetes</p>
+</blockquote>
+<p>Alright, you have my attention.</p>
+<h1>Let's dive in and take a look around.</h1>
+<p>Luckily, founder of the OpenFaaS project <a href="https://www.alexellis.io/">Alex Ellis</a> has already provided an extremely <a href="https://medium.com/devopslinks/getting-started-with-openfaas-on-minikube-634502c7acdf">helpful guide to getting OpenFaas up and running</a> on <a href="https://kubernetes.io/docs/tasks/tools/install-minikube/">minikube</a>.</p>
+<p>One <em>minor</em> thing I noticed after walking through the guide is that it doesn't explicitly mention where to find the UI if you are so inclined so I thought I would leave it here.</p>
+<ol>
+<li>
+<p>List out the services running in minikube
+<code>minikube service list</code></p>
+<p>This should output something like:</p>
+<pre><code>|-------------|------------------|-----------------------------|
+|  NAMESPACE  |       NAME       |             URL             |
+|-------------|------------------|-----------------------------|
+| default     | kubernetes       | No node port                |
+| kube-system | kube-dns         | No node port                |
+| kube-system | tiller-deploy    | No node port                |
+| openfaas    | alertmanager     | No node port                |
+| openfaas    | gateway          | No node port                |
+| openfaas    | gateway-external | http://192.168.99.101:31112 |
+| openfaas    | nats             | No node port                |
+| openfaas    | prometheus       | No node port                |
+|-------------|------------------|-----------------------------|
+</code></pre>
+</li>
+<li>
+<p>Visit the <code>gateway-external</code> URL and provide the username and password you established earlier in the <a href="https://medium.com/devopslinks/getting-started-with-openfaas-on-minikube-634502c7acdf">guide</a>.  If you are following along exactly this will be <code>admin</code> for the username and the value of <code>echo $PASSWORD</code> for the password.</p>
+</li>
+</ol>
+<p>Now that you are in, let's deploy a new function to generate random ascii art cows.</p>
+<ol>
+<li>
+<p>Click "Deploy New Function"</p>
+</li>
+<li>
+<p>In the modal that pops up, search for cows.</p>
+</li>
+<li>
+<p>ASCII Cows should be one of, if not the only, function available.</p>
+</li>
+<li>
+<p>Select the function and click Deploy.</p>
+</li>
+</ol>
+<p>Select the "cows" function in the left panel and note the "Status" field in the right panel.  Once the status is "Ready" click "INVOKE".</p>
+<pre><code>   /---------o*o
+  / |      ||
+ *  ||-----||
+    ^^     ^^
+Cow that was captured
+  by head-shrinkers
+</code></pre>
+<p>Now, time to deploy some custom functions...</p>
+
+  </div>
+</article>
+
+<hr>
+
+<nav class="post-navigation">
+  <ul>
+    <li>
+      ← Previous: <a href="/thoughts/posts/2018-12-17-dive/" rel="prev">Dive</a>
+    </li>
+    
+    <li>
+      <strong>Next: <a href="/thoughts/posts/2019-04-17-iterm2themes/" rel="next">iTerm2 Themes</a> →</strong>
+    </li>
+    
+  </ul>
+</nav>
+    </main>
+
+    <footer></footer>
+
+    <!-- Current page: /posts/2019-03-04-openfaas/ -->
+  
+
+</body></html>

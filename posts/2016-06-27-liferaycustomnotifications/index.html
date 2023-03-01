@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creating custom notifications in Liferay</title>
+    <meta name="description" content="Creating custom notifications in Liferay">
+    <link rel="stylesheet" href="/thoughts/pagefind/pagefind-ui.css"><link rel="stylesheet" href="/thoughts/styles.css">
+    <link rel="alternate" href="/thoughts/feed.xml" type="application/atom+xml" title="That. Just. Happened.">
+    <link rel="alternate" href="/thoughts/feed.json" type="application/json" title="That. Just. Happened.">
+  <script type="text/javascript" src="/thoughts/pagefind/pagefind-ui.js"></script><script type="text/javascript">window.addEventListener('DOMContentLoaded', () => { new PagefindUI({"element":"#search","showImages":false,"showEmptyFilters":true,"resetStyles":false,"bundlePath":"/thoughts/pagefind/","baseUrl":"/thoughts/"}); });</script></head>
+  <body>
+    <nav class="navbar">
+      <a href="/thoughts/" class="navbar-home">
+        <strong>That. Just. Happened.</strong>
+      </a>
+
+      <ul class="navbar-links">
+        <li>
+          <a href="/thoughts/">
+            Home
+          </a>
+        </li>
+        <li>
+          <a href="/thoughts/posts/">
+            Archive
+          </a>
+        </li>
+        <li>
+          <a href="/thoughts/about/">
+            About Me
+          </a>
+        </li>
+      </ul>
+
+      <div class="navbar-search">
+        <div id="search"></div>
+      </div>
+    </nav>
+
+    <main class="body-post">
+      <article class="post" data-pagefind-body="">
+  <div class="post-header">
+    <h1 class="post-title">Creating custom notifications in Liferay</h1>
+
+    <nav class="post-tags">
+    
+      <a href="/thoughts/tags/Liferay/" class="tag">Liferay</a>
+    
+      <a href="/thoughts/tags/Notifications/" class="tag">Notifications</a>
+    
+    </nav>
+
+    <time class="post-date" datetime="2016-06-27 00:00:00">
+      June 27th, 2016
+    </time>
+  </div>
+
+  <div class="post-body">
+    <p>As I mentioned before, I've recently started working with the <a href="https://www.liferay.com/">Liferay</a> platform.  I had some free time and decided I would spend it learning how to add custom notifications to one of the administrative portlets that contained a long-running process.  So, I scoured the internet for any documentation on how to specify custom notifications in Liferay.  What I found was this <a href="http://www.codeyouneed.com/liferay-custom-notifications/">article</a> (and various <a href="http://www.liferaysavvy.com/2014/12/liferay-dockbar-custom-user.html">re</a>-<a href="http://stackoverflow.com/questions/33821623/using-liferay-dockbar-notifications">gur</a>-<a href="http://livewithliferay.blogspot.com/2014/12/custom-notifications-implementation-in.html">gi</a>-<a href="https://community.liferay.com/forums/-/message_boards/message/55556877#_com_liferay_message_boards_web_portlet_MBPortlet_message_34854584">tations</a> of the information).  In the article, the author describes the following steps:</p>
+<ul>
+<li>Adding an XML file which defines the delivery types for the notification</li>
+<li>Adding a custom handler to produce the body of the notification
+<ul>
+<li>This contains a hard-coded portlet ID</li>
+</ul>
+</li>
+<li>Updating the liferay-portal.xml definition to include references to the custom definitions/handler</li>
+</ul>
+<p>I wanted to take a slightly different approach.  Liferay requires the custom handler to return the body of the notification but the XML file detailing the delivery types is not something I wanted to maintain.  So, here is what I did to get custom notifications working without the XML file modifications.</p>
+<p>First, I created the custom handler and overrode the GetBody and GetLink methods:</p>
+<pre><code class="language-java hljs"><span class="hljs-meta">@Override</span>
+<span class="hljs-keyword">protected</span> String <span class="hljs-title function_">getBody</span><span class="hljs-params">(
+		UserNotificationEvent userNotificationEvent,
+		ServiceContext serviceContext)</span> <span class="hljs-keyword">throws</span> Exception {
+	<span class="hljs-type">JSONObject</span> <span class="hljs-variable">jsonObject</span> <span class="hljs-operator">=</span>
+		JSONFactoryUtil.createJSONObject(
+			userNotificationEvent.getPayload()
+		);
+	String notificationTitle=jsonObject.getString(<span class="hljs-string">"title"</span>);
+	<span class="hljs-type">String</span> <span class="hljs-variable">notificationDetails</span> <span class="hljs-operator">=</span> jsonObject.getString(<span class="hljs-string">"status"</span>);
+	<span class="hljs-type">String</span> <span class="hljs-variable">body</span> <span class="hljs-operator">=</span> StringUtil.replace(getBodyTemplate(), <span class="hljs-keyword">new</span> <span class="hljs-title class_">String</span>[] {
+		<span class="hljs-string">"[$TITLE$]"</span>, <span class="hljs-string">"[$BODY_TEXT$]"</span> },
+		<span class="hljs-keyword">new</span> <span class="hljs-title class_">String</span>[] {
+			<span class="hljs-string">"&lt;strong&gt;"</span> + notificationTitle + <span class="hljs-string">"&lt;/strong&gt;"</span>,
+			notificationDetails });
+	<span class="hljs-keyword">return</span> body;
+}
+
+<span class="hljs-meta">@Override</span>
+<span class="hljs-keyword">protected</span> String <span class="hljs-title function_">getLink</span><span class="hljs-params">(
+	UserNotificationEvent userNotificationEvent,
+	ServiceContext serviceContext)</span> <span class="hljs-keyword">throws</span> Exception {
+	<span class="hljs-keyword">return</span> <span class="hljs-built_in">super</span>.getLink(userNotificationEvent, serviceContext);
+}
+
+<span class="hljs-keyword">protected</span> String <span class="hljs-title function_">getBodyTemplate</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception {
+	<span class="hljs-keyword">return</span> <span class="hljs-string">"&lt;div class=\"title\"&gt;[$TITLE$]&lt;/div&gt;"</span> +
+				<span class="hljs-string">"&lt;div class=\"body\"&gt;[$BODY_TEXT$]&lt;/div&gt;"</span>);
+}
+</code></pre>
+<p>Next, I wanted to address the hard-coded portlet ID from the <a href="http://www.codeyouneed.com/liferay-custom-notifications/">article</a> so I created a public constructor that accepts a String of the portlet ID and calls the "setPortletId" function.</p>
+<pre><code class="language-java hljs"><span class="hljs-keyword">public</span> <span class="hljs-title function_">CustomNotificationHandler</span><span class="hljs-params">(String portletId)</span> {
+		setPortletId(portletId);
+	}
+</code></pre>
+<p>Once I had the handler finished, I set out to programmatically create the appropriate definitions...</p>
+<pre><code class="language-java hljs"><span class="hljs-type">CustomNotificationHandler</span> <span class="hljs-variable">hndlr</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">com</span>.example.CustomNotificationHandler(
+	themeDisplay.getPortletDisplay().getId());
+
+UserNotificationManagerUtil.addUserNotificationHandler(hndlr);
+
+<span class="hljs-keyword">if</span>(UserNotificationManagerUtil.fetchUserNotificationDefinition(
+	hndlr.getPortletId(),
+	ClassNameLocalServiceUtil.getClassNameId(hndlr.getClass().getName()),
+	UserNotificationDeliveryConstants.TYPE_WEBSITE).equals(<span class="hljs-literal">null</span>))
+{
+
+    <span class="hljs-type">UserNotificationDefinition</span> <span class="hljs-variable">def</span> <span class="hljs-operator">=</span>
+		<span class="hljs-keyword">new</span> <span class="hljs-title class_">UserNotificationDefinition</span>(
+			hndlr.getPortletId(),
+			ClassNameLocalServiceUtil.getClassNameId(
+				hndlr.getClass().getName()
+			),
+			<span class="hljs-number">0</span>,
+			<span class="hljs-string">"Receive notification when this "</span> +
+			<span class="hljs-string">"portlet does something INCREDIBLE."</span> );
+
+    def.addUserNotificationDeliveryType(
+		<span class="hljs-keyword">new</span> <span class="hljs-title class_">UserNotificationDeliveryType</span>(
+	    	<span class="hljs-string">"Website"</span>,
+		    UserNotificationDeliveryConstants.TYPE_WEBSITE,
+			<span class="hljs-literal">true</span>,
+			<span class="hljs-literal">true</span>)
+	);
+
+	UserNotificationManagerUtil.addUserNotificationDefinition(
+		hndlr.getPortletId(),
+		def);
+}
+
+</code></pre>
+<p>Finally, I had to create and <strike>send</strike> add the actual message:</p>
+<pre><code class="language-java hljs"><span class="hljs-type">JSONObject</span> <span class="hljs-variable">payload</span> <span class="hljs-operator">=</span> JSONFactoryUtil.createJSONObject();
+payload.put(<span class="hljs-string">"status"</span>, <span class="hljs-string">"This is the extraordinary notification message."</span>);
+payload.put(<span class="hljs-string">"title"</span>, <span class="hljs-string">"Tie Til"</span>);
+payload.put(<span class="hljs-string">"userId"</span>, CurrentUser.getUserId());
+
+<span class="hljs-type">UserNotificationEvent</span> <span class="hljs-variable">notification</span> <span class="hljs-operator">=</span>
+	UserNotificationEventLocalServiceUtil.createUserNotificationEvent(
+		CounterLocalServiceUtil.increment()
+	);
+
+notification.setCompanyId(companyId);
+notification.setUserId(CurrentUser.getUserId());
+notification.setPayload(payload.toString());
+notification.setDeliverBy(UserNotificationDeliveryConstants.TYPE_WEBSITE);
+notification.setTimestamp(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>().getTime());
+notification.setArchived(<span class="hljs-literal">false</span>);
+notification.setType(hndlr.getPortletId());
+
+UserNotificationEventLocalServiceUtil.addUserNotificationEvent(notification);
+</code></pre>
+
+  </div>
+</article>
+
+<hr>
+
+<nav class="post-navigation">
+  <ul>
+    <li>
+      ← Previous: <a href="/thoughts/posts/2016-06-20-githubpagestravisci/" rel="prev">Configuring GitHub Pages and Travis CI</a>
+    </li>
+    
+    <li>
+      <strong>Next: <a href="/thoughts/posts/2016-06-29-yuidebugging/" rel="next">Debugging AlloyUI</a> →</strong>
+    </li>
+    
+  </ul>
+</nav>
+    </main>
+
+    <footer></footer>
+
+    <!-- Current page: /posts/2016-06-27-liferaycustomnotifications/ -->
+  
+
+</body></html>

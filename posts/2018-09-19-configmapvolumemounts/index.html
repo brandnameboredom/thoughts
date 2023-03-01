@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ConfigMap VolumeMount File Overwrite</title>
+    <meta name="description" content="ConfigMap VolumeMount File Overwrite">
+    <link rel="stylesheet" href="/thoughts/pagefind/pagefind-ui.css"><link rel="stylesheet" href="/thoughts/styles.css">
+    <link rel="alternate" href="/thoughts/feed.xml" type="application/atom+xml" title="That. Just. Happened.">
+    <link rel="alternate" href="/thoughts/feed.json" type="application/json" title="That. Just. Happened.">
+  <script type="text/javascript" src="/thoughts/pagefind/pagefind-ui.js"></script><script type="text/javascript">window.addEventListener('DOMContentLoaded', () => { new PagefindUI({"element":"#search","showImages":false,"showEmptyFilters":true,"resetStyles":false,"bundlePath":"/thoughts/pagefind/","baseUrl":"/thoughts/"}); });</script></head>
+  <body>
+    <nav class="navbar">
+      <a href="/thoughts/" class="navbar-home">
+        <strong>That. Just. Happened.</strong>
+      </a>
+
+      <ul class="navbar-links">
+        <li>
+          <a href="/thoughts/">
+            Home
+          </a>
+        </li>
+        <li>
+          <a href="/thoughts/posts/">
+            Archive
+          </a>
+        </li>
+        <li>
+          <a href="/thoughts/about/">
+            About Me
+          </a>
+        </li>
+      </ul>
+
+      <div class="navbar-search">
+        <div id="search"></div>
+      </div>
+    </nav>
+
+    <main class="body-post">
+      <article class="post" data-pagefind-body="">
+  <div class="post-header">
+    <h1 class="post-title">ConfigMap VolumeMount File Overwrite</h1>
+
+    <nav class="post-tags">
+    
+      <a href="/thoughts/tags/Openshift/" class="tag">Openshift</a>
+    
+      <a href="/thoughts/tags/Kubernetes/" class="tag">Kubernetes</a>
+    
+      <a href="/thoughts/tags/VolumeMount/" class="tag">VolumeMount</a>
+    
+      <a href="/thoughts/tags/ConfigMap/" class="tag">ConfigMap</a>
+    
+      <a href="/thoughts/tags/Keycloak/" class="tag">Keycloak</a>
+    
+    </nav>
+
+    <time class="post-date" datetime="2018-09-19 00:00:00">
+      September 19th, 2018
+    </time>
+  </div>
+
+  <div class="post-body">
+    <h1>Openshift/Keycloak Config</h1>
+<p>I was integrating keycloak configuration into my create-react generated app today when I stumbled upon an issue attempting to mount my configmap within my container in Openshift.</p>
+<p>I thought I would be able to simply supply the mountpath down to the file I wanted to inject</p>
+<pre><code>containers:
+- volumeMounts:
+  - name: cloakconfig
+    mountPath: /public/keycloak.json
+</code></pre>
+<p>I found, after stumbling upon [this Kubernetes issues], that I needed to specify a subpath of the specific file name I wanted to overwrite:</p>
+<pre><code>containers:
+- volumeMounts:
+  - name: cloakconfig
+    mountPath: /public/keycloak.json
+    subPath: keycloak.json
+</code></pre>
+<p>Now, when I deploy the app, the keycloak.json file is properly overwritten with the information I'm providing within my deployment config template.  Nice.</p>
+
+  </div>
+</article>
+
+<hr>
+
+<nav class="post-navigation">
+  <ul>
+    <li>
+      ← Previous: <a href="/thoughts/posts/2018-08-28-reactrouterv4redirect/" rel="prev">React-Router v4 Redirect with Redux</a>
+    </li>
+    
+    <li>
+      <strong>Next: <a href="/thoughts/posts/2018-10-10-buildah/" rel="next">Buildah</a> →</strong>
+    </li>
+    
+  </ul>
+</nav>
+    </main>
+
+    <footer></footer>
+
+    <!-- Current page: /posts/2018-09-19-configmapvolumemounts/ -->
+  
+
+</body></html>

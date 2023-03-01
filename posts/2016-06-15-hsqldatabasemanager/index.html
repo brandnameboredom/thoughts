@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HSQL Database Manager</title>
+    <meta name="description" content="HSQL Database Manager">
+    <link rel="stylesheet" href="/thoughts/pagefind/pagefind-ui.css"><link rel="stylesheet" href="/thoughts/styles.css">
+    <link rel="alternate" href="/thoughts/feed.xml" type="application/atom+xml" title="That. Just. Happened.">
+    <link rel="alternate" href="/thoughts/feed.json" type="application/json" title="That. Just. Happened.">
+  <script type="text/javascript" src="/thoughts/pagefind/pagefind-ui.js"></script><script type="text/javascript">window.addEventListener('DOMContentLoaded', () => { new PagefindUI({"element":"#search","showImages":false,"showEmptyFilters":true,"resetStyles":false,"bundlePath":"/thoughts/pagefind/","baseUrl":"/thoughts/"}); });</script></head>
+  <body>
+    <nav class="navbar">
+      <a href="/thoughts/" class="navbar-home">
+        <strong>That. Just. Happened.</strong>
+      </a>
+
+      <ul class="navbar-links">
+        <li>
+          <a href="/thoughts/">
+            Home
+          </a>
+        </li>
+        <li>
+          <a href="/thoughts/posts/">
+            Archive
+          </a>
+        </li>
+        <li>
+          <a href="/thoughts/about/">
+            About Me
+          </a>
+        </li>
+      </ul>
+
+      <div class="navbar-search">
+        <div id="search"></div>
+      </div>
+    </nav>
+
+    <main class="body-post">
+      <article class="post" data-pagefind-body="">
+  <div class="post-header">
+    <h1 class="post-title">HSQL Database Manager</h1>
+
+    <nav class="post-tags">
+    
+      <a href="/thoughts/tags/Liferay/" class="tag">Liferay</a>
+    
+      <a href="/thoughts/tags/HSQL/" class="tag">HSQL</a>
+    
+    </nav>
+
+    <time class="post-date" datetime="2016-06-15 00:00:00">
+      June 15th, 2016
+    </time>
+  </div>
+
+  <div class="post-body">
+    <p>Recently I've been working with the <a href="https://www.liferay.com/">Liferay</a> platform and I found myself in a situation where I wanted to inspect the data stored in the <a href="http://hsqldb.org/">Hypersonic</a> database that comes bundled with Liferay.  I found two recommended products for inspecting the database:</p>
+<ul>
+<li><a href="http://squirrel-sql.sourceforge.net/">SquirrelSQL</a></li>
+<li><a href="http://hsqldb.org/doc/2.0/util-guide/dbm-chapt.html">HSQL Database Manager</a></li>
+</ul>
+<p>The Liferay wiki already has a pretty decent post detailing how to setup SquirrelSQL to interact with the database so I will focus entirely on what I had to do to get the HSQL Database Manager to connect to my local database instance.</p>
+<p>First, I had to locate my hsql.jar file.  For me, that was in the ext folder under my tomcat instance:</p>
+<blockquote>
+<p>%LIFERAY_HOME%\tomcat\lib\ext\hsql.jar</p>
+</blockquote>
+<p>Next, I ran the following command:</p>
+<blockquote>
+<p>java -cp %LIFERAY_HOME%\tomcat\lib\ext\hsql.jar org.hsqldb.util.DatabaseManagerSwing</p>
+</blockquote>
+<p>This launched the HSQL Database Manager:</p>
+<img src="https://cloud.githubusercontent.com/assets/3187885/16093499/21673dba-330a-11e6-8e7b-b3229c1e44c5.png" alt="HSQL Database Manager">
+<p>Finally, I supplied my database URL:</p>
+<blockquote>
+<p>jdbc:hsqldb:file:%LIFERAY_HOME%\data\hsql\lportal</p>
+</blockquote>
+<p>Click "Ok" and...</p>
+<img src="https://cloud.githubusercontent.com/assets/3187885/16093500/216df1d2-330a-11e6-897d-5b684eddfaad.png" alt="HSQL Database Manager Connected">
+<h5>NOTE: For more detailed information on the Database Manager tool and all of it's capabilities please check out the <a href="http://hsqldb.org/doc/2.0/util-guide/dbm-chapt.html">official documentation</a>.</h5>
+
+  </div>
+</article>
+
+<hr>
+
+<nav class="post-navigation">
+  <ul>
+    <li>
+      ← Previous: <a href="/thoughts/posts/2016-01-04-runtimebroker/" rel="prev">Runtime Broker</a>
+    </li>
+    
+    <li>
+      <strong>Next: <a href="/thoughts/posts/2016-06-20-githubpagestravisci/" rel="next">Configuring GitHub Pages and Travis CI</a> →</strong>
+    </li>
+    
+  </ul>
+</nav>
+    </main>
+
+    <footer></footer>
+
+    <!-- Current page: /posts/2016-06-15-hsqldatabasemanager/ -->
+  
+
+</body></html>
